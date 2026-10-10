@@ -10,6 +10,7 @@ import pl.dev404.czytanie.core.domain.content.DictionaryRepository
 import pl.dev404.czytanie.core.domain.model.Lesson
 import pl.dev404.czytanie.core.domain.model.LessonId
 import pl.dev404.czytanie.core.domain.model.Level
+import pl.dev404.czytanie.core.domain.model.Phoneme
 import pl.dev404.czytanie.core.domain.model.Word
 import pl.dev404.czytanie.core.domain.model.WordId
 import pl.dev404.czytanie.core.domain.settings.ReadingSettings
@@ -47,6 +48,8 @@ internal class FakeDictionaryRepository(private val lessons: List<Lesson> = list
     override suspend fun lesson(id: LessonId): Lesson? = lessons.find { it.id == id }
 
     override suspend fun word(id: WordId): Word? = lessons.flatMap { it.words }.find { it.id == id }
+
+    override suspend fun phonemes(): List<Phoneme> = emptyList()
 }
 
 internal class FakeSettingsRepository(initial: ReadingSettings = ReadingSettings()) : SettingsRepository {
@@ -64,9 +67,17 @@ internal class FakeSettingsRepository(initial: ReadingSettings = ReadingSettings
 internal class FakeSpeechPlayer(
     private val phonemeMillis: Long = 0,
     private val wordMillis: Long = 0,
+    private val wordsCanBeHeard: Boolean = true,
 ) : SpeechPlayer {
     val phonemes = mutableListOf<String>()
     val words = mutableListOf<Word>()
+    val prepared = mutableListOf<Word>()
+
+    override suspend fun prepare(words: List<Word>) {
+        prepared += words
+    }
+
+    override suspend fun canPlayWord(word: Word) = wordsCanBeHeard
 
     override suspend fun playPhoneme(phonemeId: String) {
         phonemes += phonemeId

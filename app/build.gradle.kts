@@ -40,6 +40,11 @@ android {
     buildFeatures {
         buildConfig = false
     }
+
+    androidResources {
+        // SoundPool and MediaPlayer open recordings with openFd, which needs them uncompressed.
+        noCompress += "ogg"
+    }
 }
 
 dependencies {

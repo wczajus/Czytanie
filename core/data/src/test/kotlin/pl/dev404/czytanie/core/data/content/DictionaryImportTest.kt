@@ -58,6 +58,14 @@ class DictionaryImportTest {
     }
 
     @Test
+    fun `phoneme inventory comes with its recordings`() = runTest {
+        val phonemes = repository(TestDictionaries.json(version = 1)).phonemes()
+
+        phonemes.map { it.id } shouldContainExactly listOf("a", "e", "i", "m", "o", "u", "y")
+        phonemes.first().audio shouldBe "audio/phonemes/a.ogg"
+    }
+
+    @Test
     fun `same version is not imported again`() = runTest {
         repository(TestDictionaries.json(version = 1)).word(WordId("ma")).shouldNotBeNull()
 

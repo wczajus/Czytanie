@@ -47,6 +47,9 @@ abstract class DictionaryDao {
     @Query("SELECT * FROM word WHERE id = :id")
     abstract suspend fun word(id: String): WordEntity?
 
+    @Query("SELECT * FROM phoneme ORDER BY id")
+    abstract suspend fun phonemes(): List<PhonemeEntity>
+
     @Query("SELECT COUNT(*) FROM word")
     abstract suspend fun wordCount(): Int
 

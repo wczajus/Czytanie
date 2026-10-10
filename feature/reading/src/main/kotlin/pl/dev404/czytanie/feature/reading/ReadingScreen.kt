@@ -173,13 +173,18 @@ private fun Controls(
                 onClick = { onEvent(ReadingEvent.MainAction) },
             )
         }
-        ReadingButton(
-            modifier = Modifier.weight(1f),
-            icon = R.drawable.ic_reading_listen,
-            label = stringResource(R.string.reading_listen),
-            enabled = state.canListen,
-            onClick = { onEvent(ReadingEvent.Listen) },
-        )
+        if (state.canPlayWordAudio) {
+            ReadingButton(
+                modifier = Modifier.weight(1f),
+                icon = R.drawable.ic_reading_listen,
+                label = stringResource(R.string.reading_listen),
+                enabled = state.canListen,
+                onClick = { onEvent(ReadingEvent.Listen) },
+            )
+        } else {
+            // No Polish voice and no recording: nothing to offer, but the other buttons keep their places.
+            Spacer(Modifier.weight(1f))
+        }
     }
 }
 

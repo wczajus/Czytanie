@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import pl.dev404.czytanie.core.domain.model.Lesson
 import pl.dev404.czytanie.core.domain.model.LessonId
 import pl.dev404.czytanie.core.domain.model.Level
+import pl.dev404.czytanie.core.domain.model.Phoneme
 import pl.dev404.czytanie.core.domain.model.Word
 import pl.dev404.czytanie.core.domain.model.WordId
 
@@ -16,4 +17,7 @@ interface DictionaryRepository {
     suspend fun lesson(id: LessonId): Lesson?
 
     suspend fun word(id: WordId): Word?
+
+    /** The phoneme inventory with the recording of each phoneme. */
+    suspend fun phonemes(): List<Phoneme>
 }

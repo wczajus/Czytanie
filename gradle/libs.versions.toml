@@ -31,7 +31,7 @@ junit4 = "4.13.2"
 junit5 = "5.13.4"
 kotest = "5.9.1"
 turbine = "1.2.1"
-robolectric = "4.16"
+robolectric = "4.17"
 roborazzi = "1.52.0"
 
 # Static analysis

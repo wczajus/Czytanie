@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="levels_title">Czytanie</string>
-    <string name="levels_coming_soon">Tu wkrótce pojawią się poziomy i lekcje.</string>
+    <string name="levels_level_title">Poziom %1$d: %2$s</string>
+    <string name="levels_lesson">Lekcja %1$d</string>
 </resources>

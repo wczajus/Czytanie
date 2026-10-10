@@ -1,47 +1,122 @@
 package pl.dev404.czytanie.feature.levels
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import pl.dev404.czytanie.core.domain.model.LessonId
+import pl.dev404.czytanie.core.domain.model.Level
 import pl.dev404.czytanie.core.ui.theme.CzytanieTheme
 
-/** Placeholder until the level list (E5) exists. */
 @Composable
-internal fun LevelsScreen(modifier: Modifier = Modifier) {
+internal fun LevelsScreenRoute(
+    onLessonClick: (LessonId) -> Unit,
+    viewModel: LevelsViewModel = hiltViewModel(),
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    LevelsScreen(state = state, onLessonClick = onLessonClick)
+}
+
+/** Simple list of levels and their lessons. Progress and the parent's area arrive in E5. */
+@Composable
+internal fun LevelsScreen(
+    state: LevelsUiState,
+    onLessonClick: (LessonId) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Surface(modifier = modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier.padding(32.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = stringResource(R.string.levels_title),
-                style = MaterialTheme.typography.displayMedium,
-                textAlign = TextAlign.Center,
-            )
-            Text(
-                text = stringResource(R.string.levels_coming_soon),
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 16.dp),
-            )
+        when (state) {
+            LevelsUiState.Loading -> Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator()
+            }
+
+            is LevelsUiState.Ready -> LazyColumn(
+                contentPadding = PaddingValues(ScreenPadding),
+                verticalArrangement = Arrangement.spacedBy(SectionSpacing),
+            ) {
+                item {
+                    Text(
+                        text = stringResource(R.string.levels_title),
+                        style = MaterialTheme.typography.displaySmall,
+                    )
+                }
+                items(state.levels, key = { it.id }) { level ->
+                    LevelSection(level = level, onLessonClick = onLessonClick)
+                }
+            }
         }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun LevelSection(
+    level: Level,
+    onLessonClick: (LessonId) -> Unit,
+) = Column {
+    Text(
+        text = stringResource(R.string.levels_level_title, level.id, level.name),
+        style = MaterialTheme.typography.headlineSmall,
+        modifier = Modifier.padding(bottom = ButtonSpacing),
+    )
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(ButtonSpacing),
+        verticalArrangement = Arrangement.spacedBy(ButtonSpacing),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        level.lessons.forEachIndexed { index, lessonId ->
+            FilledTonalButton(
+                onClick = { onLessonClick(lessonId) },
+                modifier = Modifier.sizeIn(minWidth = LessonButtonSize, minHeight = LessonButtonSize),
+            ) {
+                Text(
+                    text = stringResource(R.string.levels_lesson, index + 1),
+                    style = MaterialTheme.typography.titleLarge,
+                )
+            }
+        }
+    }
+}
+
+private val ScreenPadding = 24.dp
+private val SectionSpacing = 24.dp
+private val ButtonSpacing = 12.dp
+private val LessonButtonSize = 72.dp
+
 @Preview
 @Composable
 private fun LevelsScreenPreview() {
-    CzytanieTheme { LevelsScreen() }
+    CzytanieTheme {
+        LevelsScreen(
+            state = LevelsUiState.Ready(
+                listOf(
+                    Level(1, "Samogłoski", listOf(LessonId("l1"))),
+                    Level(2, "Sylaby otwarte", listOf(LessonId("l2a"), LessonId("l2b"))),
+                ),
+            ),
+            onLessonClick = {},
+        )
+    }
 }

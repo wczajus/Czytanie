@@ -32,6 +32,7 @@ junit5 = "5.13.4"
 kotest = "5.9.1"
 turbine = "1.2.1"
 robolectric = "4.16"
+roborazzi = "1.52.0"
 
 # Static analysis
 detekt = "1.23.8"
@@ -87,6 +88,7 @@ junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
 
 # Plugins used by build-logic (compileOnly)
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -109,6 +111,7 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 room = { id = "androidx.room", version.ref = "androidxRoom" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 
 # Convention plugins (build-logic)
 czytanie-android-application = { id = "czytanie.android.application" }

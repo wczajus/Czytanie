@@ -33,8 +33,8 @@ błędach, ale nie na „dostępna nowsza wersja zależności” (tym zajmuje si
 `kotlinx-coroutines-test` i Turbine dodawane przez convention plugin. Testy Robolectric/Roborazzi,
 które wymagają JUnit 4, dojdą razem z E3 (silnik vintage).
 
-**D7. Roborazzi wchodzi z E3.** W E0 nie ma jeszcze ekranu, którego zrzut miałby sens, więc
-`check` na razie nie zawiera `verifyRoborazzi`.
+**D7. Roborazzi wchodzi z E3.** W E0 nie było jeszcze ekranu, którego zrzut miałby sens. Od E3
+`check` w `feature:reading` zależy od `verifyRoborazziDebug` (zob. D37).
 
 ## Domena (E1)
 
@@ -132,3 +132,41 @@ pierwszym odczytem w procesie. Import podmienia słownik w jednej transakcji; pr
 **D28. Baza w wersji 1 (v0.1.0) jest odtwarzana, a nie migrowana**: zawierała tylko pustą tabelę
 profili. Od wersji 2 każda zmiana wymaga migracji z testem, a schematy w `core/data/schemas` muszą
 być w repozytorium (CI to sprawdza i wypisuje brakujący plik w logu).
+
+## Ekran czytania (E3)
+
+**D29. Strzałka dojeżdża do jednostki w 30% kroku (najwyżej 300 ms), potem stoi pod nią.** Nagranie
+głoski startuje razem z krokiem (D11), więc strzałka musi być pod jednostką prawie od razu; ruch przez
+cały krok oznaczałby, że głoska brzmi, zanim strzałka do niej dojedzie. Środek jednostki to połowa
+odcinka od lewej krawędzi pierwszego do prawej krawędzi ostatniego znaku (`getBoundingBox`).
+
+**D30. Dziecko samo zaczyna każdy wyraz** przyciskiem „Czytaj” albo dotknięciem wyrazu. Strzałka nie
+rusza sama po pokazaniu wyrazu: dziecko ma chwilę, żeby spojrzeć na całość i się przygotować.
+
+**D31. Przyciski mają stałe miejsca**: „Jeszcze raz” po lewej, główny w środku („Czytaj” / „Pauza” /
+„Czytaj dalej”, a po przeczytaniu „Następny”), „Posłuchaj” po prawej. „Posłuchaj” i „Następny” są
+aktywne dopiero po przejściu strzałki przez cały wyraz, żeby dziecko nie przeskakiwało wyrazów bez
+próby.
+
+**D32. Bieżącą jednostkę wyróżnia tylko kolor**, nie pogrubienie: inna grubość zmieniłaby szerokość
+wyrazu i strzałka by skakała.
+
+**D33. Po przeczytaniu cały wyraz wraca do zwykłego koloru, a strzałka znika.** Dziecko widzi wyraz
+jako całość, a nie jako ciąg wyszarzonych liter. Obrazek (jeśli jest) pojawia się dopiero wtedy.
+
+**D34. Długi wyraz jest zmniejszany, żeby zmieścił się w jednej linii.** Wybrany rozmiar (D18)
+pozostaje górną granicą; wyrazu nigdy nie dzielimy na linie.
+
+**D35. Do czasu E4 aplikacja używa `SilentSpeechPlayer`** (TODO(audio)): nic nie odtwarza, więc
+strzałka idzie w samym tempie, a „Posłuchaj” jest cichy.
+
+**D36. Lista poziomów to na razie prosta lista lekcji** („Poziom 1: Samogłoski”, „Lekcja 1”…), żeby
+ekran czytania był dostępny w wydaniu. Postępy, bramka i panel rodzica dochodzą w E5.
+
+**D37. Zrzuty Roborazzi są w `feature/reading/src/test/snapshots`.** Testy JVM tego modułu działają
+tylko w wariancie debug (aktywność testowa Compose jest rejestrowana tylko tam). Lokalnego SDK
+Androida w środowisku Claude nie ma, więc pierwsze zrzuty nagrywa CI i wypisuje je w logu jako base64
+(bez artefaktów), a człowiek lub Claude przegląda je przed dodaniem do repozytorium.
+
+**D38. detekt dopuszcza stałe `SCREAMING_CASE` obok `PascalCase`** (wzorzec `[A-Z][A-Za-z0-9_]*`),
+bo stałe `const val` w Kotlinie tradycyjnie mają podkreślenia, a wartości `Dp` w Compose nie.

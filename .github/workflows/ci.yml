@@ -33,7 +33,18 @@ jobs:
           # Only main writes the Gradle cache; PRs read it. The cache is not artifact storage.
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
-      - name: Check (lint, detekt, ktlint, unit tests)
+      # TEMPORARY (E3 bootstrap, D37): record the first reference screenshots and print them to the
+      # log as base64 so they can be reviewed and committed. Remove once they are in the repository.
+      - name: Record reference screenshots (bootstrap)
+        run: |
+          ./gradlew :feature:reading:recordRoborazziDebug --stacktrace
+          for f in feature/reading/src/test/snapshots/*.png; do
+            echo "----- BEGIN $f -----"
+            base64 -w0 "$f"; echo
+            echo "----- END $f -----"
+          done
+
+      - name: Check (lint, detekt, ktlint, unit tests, screenshots)
         run: ./gradlew check --continue --stacktrace
 
       # Room writes exported schemas during the build; they must be committed for migration tests.

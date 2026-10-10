@@ -13,4 +13,23 @@ data class Syllable(
             "Range [$startIndex, $endIndex) does not match syllable '$text'"
         }
     }
+
+    /** Asset path of the syllable's recording. */
+    val audio: String get() = audioPathOf(text)
+
+    companion object {
+        private val ASCII = mapOf(
+            'ą' to "a1", 'ć' to "c1", 'ę' to "e1", 'ł' to "l1", 'ń' to "n1",
+            'ó' to "o1", 'ś' to "s1", 'ź' to "z1", 'ż' to "z2",
+        )
+
+        /**
+         * Asset path of the recording of [syllable], e.g. "żą" → "audio/syllables/z2a1.ogg". Names
+         * are lowercase ASCII, so they survive any tool and case-insensitive file systems.
+         */
+        fun audioPathOf(syllable: String): String {
+            val name = syllable.lowercase().map { ASCII[it] ?: it.toString() }.joinToString("")
+            return "audio/syllables/$name.ogg"
+        }
+    }
 }

@@ -13,6 +13,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import pl.dev404.czytanie.core.domain.pacing.PointingUnit
 import pl.dev404.czytanie.core.domain.settings.ReadingSettings
 import pl.dev404.czytanie.core.domain.settings.WordFontSize
 
@@ -33,6 +34,7 @@ class DataStoreSettingsRepositoryTest {
             tempoMillis = 900,
             phonemesEnabled = true,
             fontSize = WordFontSize.Large,
+            pointingUnit = PointingUnit.Graphemes,
         )
     }
 
@@ -48,6 +50,8 @@ class DataStoreSettingsRepositoryTest {
             awaitItem().phonemesEnabled shouldBe false
             repository.setFontSize(WordFontSize.ExtraLarge)
             awaitItem().fontSize shouldBe WordFontSize.ExtraLarge
+            repository.setPointingUnit(PointingUnit.Syllables)
+            awaitItem().pointingUnit shouldBe PointingUnit.Syllables
         }
     }
 
@@ -68,9 +72,10 @@ class DataStoreSettingsRepositoryTest {
         val first = repository(CoroutineScope(StandardTestDispatcher(testScheduler) + firstJob))
         first.setTempo(1200)
         first.setFontSize(WordFontSize.Medium)
+        first.setPointingUnit(PointingUnit.Syllables)
         firstJob.cancelAndJoin()
 
         val second = repository()
-        second.settings.first() shouldBe ReadingSettings(1200, true, WordFontSize.Medium)
+        second.settings.first() shouldBe ReadingSettings(1200, true, WordFontSize.Medium, PointingUnit.Syllables)
     }
 }

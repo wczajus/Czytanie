@@ -19,6 +19,7 @@ import pl.dev404.czytanie.core.domain.model.Level
 import pl.dev404.czytanie.core.domain.model.Phoneme
 import pl.dev404.czytanie.core.domain.model.Word
 import pl.dev404.czytanie.core.domain.model.WordId
+import pl.dev404.czytanie.core.domain.pacing.PointingUnit
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AndroidSpeechPlayerTest {
@@ -74,6 +75,22 @@ class AndroidSpeechPlayerTest {
 
         clips.loaded shouldContainExactly
             listOf("audio/phonemes/sz.ogg", "audio/phonemes/a.ogg", "audio/phonemes/f.ogg")
+    }
+
+    @Test
+    fun `syllables are played from their recordings and never through TTS`() = runTest {
+        player.playSyllable("Żą")
+
+        clips.played shouldContainExactly listOf("audio/syllables/z2a1.ogg")
+        speech.spoken.shouldBeEmpty()
+    }
+
+    @Test
+    fun `preparing a lesson by syllables loads each syllable once`() = runTest {
+        player.prepare(listOf(szafa, szafa), PointingUnit.Syllables)
+        player.playSyllable("sza")
+
+        clips.loaded shouldContainExactly listOf("audio/syllables/sza.ogg", "audio/syllables/fa.ogg")
     }
 
     @Test

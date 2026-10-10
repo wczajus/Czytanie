@@ -60,7 +60,7 @@ class ReadingViewModel @Inject constructor(
                 return@launch
             }
             progress.value = Progress.AtWord(lesson, 0)
-            launch { speechPlayer.prepare(lesson.words) }
+            launch { speechPlayer.prepare(lesson.words, settings.value.pointingUnit) }
             silentWords.value = lesson.words.filterNot { speechPlayer.canPlayWord(it) }.map { it.id }.toSet()
         }
     }
@@ -86,6 +86,8 @@ class ReadingViewModel @Inject constructor(
             fontSize = settings.fontSize,
             isPlayingWord = isPlayingWord,
             canPlayWordAudio = progress.word.id !in silentWords,
+            // A word keeps what it started with; before the start the arrow follows the settings.
+            pointingUnit = if (readingState == ReadingState.Idle) settings.pointingUnit else engine.pointingUnit,
         )
     }
 

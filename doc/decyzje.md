@@ -299,3 +299,22 @@ podpowiedź „sprawdź ręcznie”, bo zapożyczenia („pianino”, „Maria�
 
 **D62. Tempo od 0,1 s na głoskę** (było od 0,3 s), krok suwaka 0,1 s. Szybkie tempo jest dla dzieci,
 które już czytają płynnie dłuższe teksty; domyślne tempo się nie zmienia (0,9 s).
+
+## Czytanie sylabami
+
+**D63. Rodzic wybiera, co wskazuje strzałka: głoski (domyślnie) albo sylaby** (ustawienie „Strzałka
+wskazuje”). W trybie sylab strzałka staje pod środkiem sylaby, podświetla całą sylabę i odtwarza jej
+nagranie; krok trwa `max(tempo, nagranie)`, tak samo jak dla głosek. Silnik ustala jednostkę na
+starcie wyrazu i trzyma ją do końca, żeby indeks po pauzie znaczył to samo. Działa na wszystkich
+poziomach, także w czytankach. Na prośbę właściciela, w odpowiedzi na pytanie, co czytać na głos
+przy podświetlonym fragmencie (wybrał sylaby, a nie TTS całych wyrazów), więc zasada „nie czytamy
+wyrazu przed próbą dziecka” zostaje nienaruszona.
+
+**D64. Nagrania sylab są na razie syntetyczne (espeak-ng, offline), wygenerowane przed buildem**
+skryptem `tools/generate-syllable-audio.py` i dołączone jako pliki `.ogg` (754 sylaby, ok. 4 MB). To
+nie łamie zakazu TTS w aplikacji: aplikacja tylko odtwarza pliki, a skrypt sprawdza transkrypcję
+fonetyczną espeak i dla sylab, które przeczytałby jako nazwę litery („y” → „igrek”) albo bez
+samogłoski („w”, „z”), podaje głoski wprost. Głos espeak brzmi sztucznie, dlatego to `TODO(audio)`:
+nagrania lektora zastąpią te pliki bez zmian w kodzie (te same nazwy). Nazwy plików są ASCII, małymi
+literami, z cyfrą zamiast znaku diakrytycznego (ą → a1, ż → z2), żeby nie kolidowały na systemach
+plików bez rozróżniania wielkości liter. Sylaby czytanki są przybliżone (D60).

@@ -45,7 +45,8 @@ private const val ARROW_MOVE_SHARE = 0.3f
 private const val ARROW_MOVE_MAX_MILLIS = 300
 
 /**
- * The word being read, with the arrow under the current unit. The current unit is highlighted
+ * The word being read, with the arrow under the current unit (a grapheme, or a syllable when
+ * [units] are syllables). The current unit is highlighted
  * and the units already read fade back. Colour is the only difference between them: a bolder
  * weight would change the word's width and make the arrow jump.
  *
@@ -58,6 +59,7 @@ internal fun ReadingWord(
     style: TextStyle,
     onTap: () -> Unit,
     modifier: Modifier = Modifier,
+    units: List<ReadingUnit> = word.units,
 ) {
     val colors = CzytanieThemeExtras.readingColors
     var layout by remember(word, style) { mutableStateOf<TextLayoutResult?>(null) }
@@ -66,7 +68,7 @@ internal fun ReadingWord(
 
     LaunchedEffect(layout, target) {
         val textLayout = layout ?: return@LaunchedEffect
-        val x = textLayout.centerOf(word.units[target.index])
+        val x = textLayout.centerOf(units[target.index])
         if (arrowX.value.isNaN() || target.moveMillis == 0) {
             arrowX.snapTo(x)
         } else {
@@ -85,7 +87,7 @@ internal fun ReadingWord(
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = word.highlighted(readingState, colors),
+                text = word.highlighted(readingState, colors, units),
                 style = style,
                 softWrap = false,
                 onTextLayout = { layout = it },
@@ -158,6 +160,7 @@ internal fun TextLayoutResult.centerOf(unit: ReadingUnit): Float {
 internal fun Word.highlighted(
     state: ReadingState,
     colors: ReadingColors,
+    units: List<ReadingUnit> = this.units,
 ): AnnotatedString {
     val current = state.currentIndex
     fun colorOf(index: Int) = when {

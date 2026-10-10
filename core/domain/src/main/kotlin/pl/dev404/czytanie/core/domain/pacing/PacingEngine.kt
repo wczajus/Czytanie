@@ -52,19 +52,28 @@ class PacingEngine(
     /** Takes effect from the next step; the current one finishes with the old tempo. */
     var config: PacingConfig = initialConfig
 
-    private var word: Word? = null
+    private var units: List<ReadingUnit>? = null
+
+    /** What the arrow steps through in the current word; [ReadingState] indices refer to it. */
+    var pointingUnit: PointingUnit = PointingUnit.Graphemes
+        private set
     private var job: Job? = null
     private var generation = 0
 
-    /** Starts reading [word] from its first unit, abandoning any word in progress. */
+    /**
+     * Starts reading [word] from its first unit, abandoning any word in progress. Whether the arrow
+     * steps through graphemes or syllables is taken from [config] now and kept for the whole word,
+     * so a paused index always means the same span.
+     */
     fun start(word: Word) {
-        this.word = word
+        pointingUnit = config.pointingUnit
+        units = word.pointingUnits(pointingUnit)
         runFrom(0)
     }
 
     /** Starts the current word again from its first unit. No-op before [start]. */
     fun restart() {
-        if (word != null) runFrom(0)
+        if (units != null) runFrom(0)
     }
 
     /** Stops the arrow on the current unit. No-op when nothing is moving. */
@@ -92,12 +101,12 @@ class PacingEngine(
     /** Forgets the word and returns to [Idle]. */
     fun reset() {
         cancelRun()
-        word = null
+        units = null
         mutableState.value = Idle
     }
 
     private fun runFrom(startIndex: Int) {
-        val units = checkNotNull(word).units
+        val units = checkNotNull(units)
         val runGeneration = cancelRun()
         job = scope.launch {
             for (index in startIndex until units.size) {
@@ -114,7 +123,7 @@ class PacingEngine(
     ) = coroutineScope {
         val stepConfig = config
         emit(runGeneration, Pointing(index, stepConfig.tempoMillis))
-        val recording = if (stepConfig.phonemesEnabled) launch { playSafely(unit.phonemeId) } else null
+        val recording = if (stepConfig.phonemesEnabled) launch { playSafely(unit) } else null
         delay(stepConfig.tempoMillis)
         if (recording?.isActive == true) {
             emit(runGeneration, WaitingForAudio(index))
@@ -124,9 +133,12 @@ class PacingEngine(
 
     /** A broken or missing recording must not stop the child from reading. */
     @Suppress("TooGenericExceptionCaught")
-    private suspend fun playSafely(phonemeId: String) {
+    private suspend fun playSafely(unit: ReadingUnit) {
         try {
-            speechPlayer.playPhoneme(phonemeId)
+            when (pointingUnit) {
+                PointingUnit.Graphemes -> speechPlayer.playPhoneme(unit.phonemeId)
+                PointingUnit.Syllables -> speechPlayer.playSyllable(unit.grapheme)
+            }
         } catch (e: CancellationException) {
             throw e
         } catch (_: Exception) {

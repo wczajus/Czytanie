@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlin.math.roundToLong
 import pl.dev404.czytanie.core.domain.pacing.PacingConfig
+import pl.dev404.czytanie.core.domain.pacing.PointingUnit
 import pl.dev404.czytanie.core.domain.settings.ReadingSettings
 import pl.dev404.czytanie.core.domain.settings.WordFontSize
 import pl.dev404.czytanie.core.ui.theme.readingWordStyle
@@ -66,6 +67,7 @@ internal fun SettingsScreen(
             }
             if (settings != null) {
                 TempoSetting(settings.tempoMillis, onEvent)
+                PointingUnitSetting(settings.pointingUnit, onEvent)
                 PhonemesSetting(settings.phonemesEnabled, onEvent)
                 FontSizeSetting(settings.fontSize, onEvent)
             }
@@ -122,6 +124,26 @@ private fun PhonemesSetting(
 }
 
 @Composable
+private fun PointingUnitSetting(
+    pointingUnit: PointingUnit,
+    onEvent: (SettingsEvent) -> Unit,
+) {
+    Column {
+        Text(stringResource(R.string.settings_pointing_unit), style = MaterialTheme.typography.titleLarge)
+        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+            PointingUnit.entries.forEachIndexed { index, unit ->
+                SegmentedButton(
+                    selected = unit == pointingUnit,
+                    onClick = { onEvent(SettingsEvent.PointingUnitChosen(unit)) },
+                    shape = SegmentedButtonDefaults.itemShape(index, PointingUnit.entries.size),
+                ) { Text(stringResource(unit.label)) }
+            }
+        }
+        Text(stringResource(R.string.settings_pointing_unit_hint), style = MaterialTheme.typography.bodyMedium)
+    }
+}
+
+@Composable
 private fun FontSizeSetting(
     fontSize: WordFontSize,
     onEvent: (SettingsEvent) -> Unit,
@@ -150,6 +172,12 @@ private val WordFontSize.label: Int
         WordFontSize.Medium -> R.string.settings_font_medium
         WordFontSize.Large -> R.string.settings_font_large
         WordFontSize.ExtraLarge -> R.string.settings_font_extra_large
+    }
+
+private val PointingUnit.label: Int
+    get() = when (this) {
+        PointingUnit.Graphemes -> R.string.settings_pointing_graphemes
+        PointingUnit.Syllables -> R.string.settings_pointing_syllables
     }
 
 private const val MILLIS_PER_SECOND = 1000f

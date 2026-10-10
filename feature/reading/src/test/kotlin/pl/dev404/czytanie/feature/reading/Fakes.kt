@@ -13,6 +13,7 @@ import pl.dev404.czytanie.core.domain.model.Level
 import pl.dev404.czytanie.core.domain.model.Phoneme
 import pl.dev404.czytanie.core.domain.model.Word
 import pl.dev404.czytanie.core.domain.model.WordId
+import pl.dev404.czytanie.core.domain.pacing.PointingUnit
 import pl.dev404.czytanie.core.domain.segmentation.GraphemeSegmenter
 import pl.dev404.czytanie.core.domain.settings.ReadingSettings
 import pl.dev404.czytanie.core.domain.settings.SettingsRepository
@@ -88,6 +89,10 @@ internal class FakeSettingsRepository(initial: ReadingSettings = ReadingSettings
     override suspend fun setPhonemesEnabled(enabled: Boolean) = state.update { it.copy(phonemesEnabled = enabled) }
 
     override suspend fun setFontSize(fontSize: WordFontSize) = state.update { it.copy(fontSize = fontSize) }
+
+    override suspend fun setPointingUnit(pointingUnit: PointingUnit) = state.update {
+        it.copy(pointingUnit = pointingUnit)
+    }
 }
 
 /** Recordings of a controlled length; remembers what was played. */
@@ -97,10 +102,14 @@ internal class FakeSpeechPlayer(
     private val wordsCanBeHeard: Boolean = true,
 ) : SpeechPlayer {
     val phonemes = mutableListOf<String>()
+    val syllables = mutableListOf<String>()
     val words = mutableListOf<Word>()
     val prepared = mutableListOf<Word>()
 
-    override suspend fun prepare(words: List<Word>) {
+    override suspend fun prepare(
+        words: List<Word>,
+        pointingUnit: PointingUnit,
+    ) {
         prepared += words
     }
 
@@ -108,6 +117,11 @@ internal class FakeSpeechPlayer(
 
     override suspend fun playPhoneme(phonemeId: String) {
         phonemes += phonemeId
+        delay(phonemeMillis)
+    }
+
+    override suspend fun playSyllable(syllable: String) {
+        syllables += syllable
         delay(phonemeMillis)
     }
 

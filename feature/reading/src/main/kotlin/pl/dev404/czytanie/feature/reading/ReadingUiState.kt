@@ -1,8 +1,11 @@
 package pl.dev404.czytanie.feature.reading
 
 import pl.dev404.czytanie.core.domain.model.LessonId
+import pl.dev404.czytanie.core.domain.model.ReadingUnit
 import pl.dev404.czytanie.core.domain.model.Word
+import pl.dev404.czytanie.core.domain.pacing.PointingUnit
 import pl.dev404.czytanie.core.domain.pacing.ReadingState
+import pl.dev404.czytanie.core.domain.pacing.pointingUnits
 import pl.dev404.czytanie.core.domain.settings.WordFontSize
 
 sealed interface ReadingUiState {
@@ -26,7 +29,11 @@ sealed interface ReadingUiState {
         val fontSize: WordFontSize,
         val isPlayingWord: Boolean = false,
         val canPlayWordAudio: Boolean = true,
+        val pointingUnit: PointingUnit = PointingUnit.Graphemes,
     ) : ReadingUiState {
+        /** The spans the arrow visits; indices of [readingState] refer to them. */
+        val pointedUnits: List<ReadingUnit> get() = word.pointingUnits(pointingUnit)
+
         val isWordDone: Boolean get() = readingState == ReadingState.WordDone
 
         /** The whole word may be heard only after the arrow has passed it: the child reads first. */

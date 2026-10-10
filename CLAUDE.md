@@ -137,6 +137,7 @@ Przed zakończeniem zadania zawsze uruchom `./gradlew check` i upewnij się, że
 7. **E6 Wydanie** — ikona, polityka prywatności, ankieta Families, ścieżka testów wewnętrznych.
 
 Nagrania głosek przygotowuje człowiek. Do czasu ich dostarczenia używaj plików zastępczych (cisza o zadanej długości) i oznacz to w kodzie `// TODO(audio)`.
+Nagrania sylab (`assets/audio/syllables/`, nazwy wg `Syllable.audioPathOf`) są tymczasowo syntetyczne: generuje je offline `tools/generate-syllable-audio.py` (espeak-ng) przed buildem, nigdy w aplikacji (D64). Po dodaniu wyrazów uruchom skrypt ponownie; walidator wymaga nagrania każdej sylaby.
 
 ## Czego NIE robić
 

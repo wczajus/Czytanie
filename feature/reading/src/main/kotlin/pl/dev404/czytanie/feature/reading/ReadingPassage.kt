@@ -27,6 +27,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import kotlinx.coroutines.launch
+import pl.dev404.czytanie.core.domain.model.ReadingUnit
 import pl.dev404.czytanie.core.domain.model.Word
 import pl.dev404.czytanie.core.domain.pacing.ReadingState
 import pl.dev404.czytanie.core.ui.theme.CzytanieThemeExtras
@@ -54,6 +55,7 @@ internal fun ReadingPassage(
     style: TextStyle,
     onTap: () -> Unit,
     modifier: Modifier = Modifier,
+    units: List<ReadingUnit> = word.units,
 ) {
     val colors = CzytanieThemeExtras.readingColors
     var layout by remember(word, style) { mutableStateOf<TextLayoutResult?>(null) }
@@ -67,7 +69,7 @@ internal fun ReadingPassage(
         val viewportPx = constraints.maxHeight
         LaunchedEffect(layout, target) {
             val textLayout = layout ?: return@LaunchedEffect
-            val unit = word.units[target.index]
+            val unit = units[target.index]
             val line = textLayout.getLineForOffset(unit.startIndex)
             launch {
                 val top = textLayout.getLineTop(line).toInt()
@@ -92,7 +94,7 @@ internal fun ReadingPassage(
             ),
         ) {
             Text(
-                text = word.highlighted(readingState, colors),
+                text = word.highlighted(readingState, colors, units),
                 style = style,
                 softWrap = true,
                 onTextLayout = { layout = it },

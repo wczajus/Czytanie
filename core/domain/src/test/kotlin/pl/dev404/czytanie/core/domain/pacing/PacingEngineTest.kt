@@ -276,6 +276,44 @@ class PacingEngineTest {
     }
 
     @Test
+    fun `by syllables the arrow steps through syllables and plays their recordings`() = runTest {
+        val h = harness(tempoMillis = 500, durations = mapOf("sza" to 700))
+        h.engine.config = PacingConfig(tempoMillis = 500, pointingUnit = PointingUnit.Syllables)
+
+        h.engine.start(szafa)
+        advanceTo(10_000)
+
+        h.log.map { it.second } shouldContainExactly listOf(
+            Idle,
+            Pointing(0, 500),
+            WaitingForAudio(0),
+            Pointing(1, 500),
+            WordDone,
+        )
+        h.player.syllables shouldContainExactly listOf(
+            FakeSpeechPlayer.Playback("sza", 0),
+            FakeSpeechPlayer.Playback("fa", 700),
+        )
+        h.player.phonemes.shouldBeEmpty()
+        h.log.last() shouldBe (1200L to WordDone)
+    }
+
+    @Test
+    fun `pointing unit is kept for the whole word`() = runTest {
+        val h = harness(tempoMillis = 500, phonemesEnabled = false)
+        h.engine.config = PacingConfig(500, phonemesEnabled = false, pointingUnit = PointingUnit.Syllables)
+        h.engine.start(szafa)
+        advanceTo(100)
+        h.engine.pause()
+
+        h.engine.config = PacingConfig(tempoMillis = 500, phonemesEnabled = false)
+        h.engine.resume()
+        advanceTo(10_000)
+
+        h.log.map { it.second }.filterIsInstance<Pointing>().map { it.index } shouldContainExactly listOf(0, 0, 1)
+    }
+
+    @Test
     fun `a broken recording does not stop reading`() = runTest {
         val h = harness(tempoMillis = 500, failing = setOf("f"))
 

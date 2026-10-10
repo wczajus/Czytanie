@@ -20,6 +20,7 @@ class FakeSpeechPlayer(
 
     val phonemes = mutableListOf<Playback>()
     val cancelled = mutableListOf<String>()
+    val syllables = mutableListOf<Playback>()
     val words = mutableListOf<Word>()
 
     override suspend fun playPhoneme(phonemeId: String) {
@@ -31,6 +32,11 @@ class FakeSpeechPlayer(
             cancelled += phonemeId
             throw e
         }
+    }
+
+    override suspend fun playSyllable(syllable: String) {
+        syllables += Playback(syllable, now())
+        delay(durationsMillis[syllable] ?: defaultDurationMillis)
     }
 
     override suspend fun playWord(word: Word) {

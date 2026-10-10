@@ -125,6 +125,7 @@ private fun WordArea(
             style = readingPassageStyle(state.fontSize),
             onTap = { onEvent(ReadingEvent.WordTapped) },
             modifier = Modifier.fillMaxSize(),
+            units = state.pointedUnits,
         )
         return
     }
@@ -137,6 +138,7 @@ private fun WordArea(
                 readingState = state.readingState,
                 style = fittedWordStyle(state.word.text, readingWordStyle(state.fontSize), maxWidthPx),
                 onTap = { onEvent(ReadingEvent.WordTapped) },
+                units = state.pointedUnits,
             )
         }
     }

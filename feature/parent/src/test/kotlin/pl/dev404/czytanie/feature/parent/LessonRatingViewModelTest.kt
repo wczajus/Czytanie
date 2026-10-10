@@ -25,6 +25,7 @@ import pl.dev404.czytanie.core.domain.model.ParentRating
 import pl.dev404.czytanie.core.domain.model.Phoneme
 import pl.dev404.czytanie.core.domain.model.Word
 import pl.dev404.czytanie.core.domain.model.WordId
+import pl.dev404.czytanie.core.domain.pacing.PointingUnit
 import pl.dev404.czytanie.core.domain.progress.Attempt
 import pl.dev404.czytanie.core.domain.progress.LessonProgress
 import pl.dev404.czytanie.core.domain.progress.ProgressRepository
@@ -134,4 +135,6 @@ private class FakeSettings(initial: ReadingSettings) : SettingsRepository {
     override suspend fun setPhonemesEnabled(enabled: Boolean) = Unit
 
     override suspend fun setFontSize(fontSize: WordFontSize) = Unit
+
+    override suspend fun setPointingUnit(pointingUnit: PointingUnit) = Unit
 }

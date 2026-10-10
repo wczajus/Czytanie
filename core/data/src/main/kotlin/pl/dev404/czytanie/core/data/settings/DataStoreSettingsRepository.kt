@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import pl.dev404.czytanie.core.domain.pacing.PacingConfig
+import pl.dev404.czytanie.core.domain.pacing.PointingUnit
 import pl.dev404.czytanie.core.domain.settings.ReadingSettings
 import pl.dev404.czytanie.core.domain.settings.SettingsRepository
 import pl.dev404.czytanie.core.domain.settings.WordFontSize
@@ -39,12 +40,18 @@ class DataStoreSettingsRepository @Inject constructor(private val dataStore: Dat
         dataStore.edit { it[Keys.FONT_SIZE] = fontSize.name }
     }
 
+    override suspend fun setPointingUnit(pointingUnit: PointingUnit) {
+        dataStore.edit { it[Keys.POINTING_UNIT] = pointingUnit.name }
+    }
+
     private fun Preferences.toSettings(): ReadingSettings {
         val defaults = ReadingSettings()
         return ReadingSettings(
             tempoMillis = (this[Keys.TEMPO] ?: defaults.tempoMillis).coerceIn(PacingConfig.TEMPO_RANGE_MILLIS),
             phonemesEnabled = this[Keys.PHONEMES_ENABLED] ?: defaults.phonemesEnabled,
             fontSize = WordFontSize.entries.firstOrNull { it.name == this[Keys.FONT_SIZE] } ?: defaults.fontSize,
+            pointingUnit = PointingUnit.entries.firstOrNull { it.name == this[Keys.POINTING_UNIT] }
+                ?: defaults.pointingUnit,
         )
     }
 
@@ -52,5 +59,6 @@ class DataStoreSettingsRepository @Inject constructor(private val dataStore: Dat
         val TEMPO = longPreferencesKey("tempo_millis")
         val PHONEMES_ENABLED = booleanPreferencesKey("phonemes_enabled")
         val FONT_SIZE = stringPreferencesKey("word_font_size")
+        val POINTING_UNIT = stringPreferencesKey("pointing_unit")
     }
 }

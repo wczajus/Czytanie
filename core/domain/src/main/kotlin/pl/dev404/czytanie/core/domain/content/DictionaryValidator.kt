@@ -5,6 +5,7 @@ import pl.dev404.czytanie.core.domain.content.DictionaryIssue.Companion.warning
 import pl.dev404.czytanie.core.domain.model.Dictionary
 import pl.dev404.czytanie.core.domain.model.Lesson
 import pl.dev404.czytanie.core.domain.model.Level
+import pl.dev404.czytanie.core.domain.model.Syllable
 import pl.dev404.czytanie.core.domain.model.Word
 import pl.dev404.czytanie.core.domain.segmentation.GraphemeSegmenter
 
@@ -78,6 +79,11 @@ class DictionaryValidator(private val segmenter: GraphemeSegmenter = GraphemeSeg
             word.wordAudio?.takeUnless(assetExists)?.let { add(error(subject, "missing recording $it")) }
             word.image?.takeUnless(assetExists)?.let { add(error(subject, "missing image $it")) }
             addAll(compareWithSegmenter(word, subject))
+        }
+        // Syllables are shared by many words, so each missing recording is reported once.
+        dictionary.words.flatMap { it.syllables }.map { it.text.lowercase() }.distinct().forEach { syllable ->
+            val audio = Syllable.audioPathOf(syllable)
+            if (!assetExists(audio)) add(error("syllable $syllable", "missing recording $audio"))
         }
     }
 

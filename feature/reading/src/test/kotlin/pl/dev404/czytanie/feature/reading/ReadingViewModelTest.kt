@@ -15,6 +15,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import pl.dev404.czytanie.core.domain.pacing.PointingUnit
 import pl.dev404.czytanie.core.domain.pacing.ReadingState
 import pl.dev404.czytanie.core.domain.settings.ReadingSettings
 import pl.dev404.czytanie.core.domain.settings.WordFontSize
@@ -62,6 +63,23 @@ class ReadingViewModelTest {
         state.readingState shouldBe ReadingState.Idle
         state.canListen shouldBe false
         state.canRepeat shouldBe false
+    }
+
+    @Test
+    fun `by syllables the arrow visits syllables and plays their recordings`() = runTest(main.dispatcher) {
+        val settings = ReadingSettings(tempoMillis = TEMPO, pointingUnit = PointingUnit.Syllables)
+        val viewModel = viewModel(settings = settings)
+        viewModel.uiState.test {
+            advanceUntilIdle()
+            viewModel.onEvent(ReadingEvent.MainAction)
+            runCurrent()
+            reading().pointedUnits.map { it.grapheme } shouldContainExactly listOf("ma", "ma")
+
+            readWholeWord(TestWords.mama.syllables.size)
+            reading().readingState shouldBe ReadingState.WordDone
+            speechPlayer.syllables shouldContainExactly listOf("ma", "ma")
+            speechPlayer.phonemes.shouldBeEmpty()
+        }
     }
 
     @Test

@@ -55,6 +55,14 @@ class DictionaryValidatorTest {
     }
 
     @Test
+    fun `missing syllable recording is reported once`() {
+        val issues = validator.validate(dictionary()) { it != "audio/syllables/ma.ogg" }
+
+        issues.errors shouldHaveSize 1
+        issues.errors.single().message shouldContain "audio/syllables/ma.ogg"
+    }
+
+    @Test
     fun `unit without phoneme entry is an error`() {
         val issues = validator.validate(
             dictionary(phonemes = listOf("a", "o", "u", "e", "i", "y").map(::phoneme)),

@@ -16,7 +16,8 @@ import pl.dev404.czytanie.core.ui.theme.CzytanieTheme
 
 /**
  * Reference screenshots of the reading screen: every word size in light and dark theme, with the
- * arrow under the digraph "sz" of "szafa" (it must sit under the middle of both letters).
+ * arrow under the digraph "sz" of "szafa" (it must sit under the middle of both letters), and a
+ * level 7 sentence.
  *
  * Record with `./gradlew recordRoborazziDebug`; `check` verifies them.
  */
@@ -51,6 +52,13 @@ class ReadingScreenScreenshotTest(
     fun wordDone() {
         if (fontSize != WordFontSize.Large) return
         capture("reading_szafa_done_$theme", TestWords.szafa, ReadingState.WordDone)
+    }
+
+    /** A sentence: the arrow skips the space and sits under "k" of "kota"; the space has faded. */
+    @Test
+    fun sentence() {
+        if (fontSize != WordFontSize.Large) return
+        capture("reading_sentence_k_$theme", TestWords.alaMaKota, ReadingState.Paused(5))
     }
 
     private fun capture(

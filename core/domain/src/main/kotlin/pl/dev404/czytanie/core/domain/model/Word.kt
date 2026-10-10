@@ -4,6 +4,9 @@ package pl.dev404.czytanie.core.domain.model
  * A word from the hand-annotated dictionary. The annotation ([units], [syllables]) is the source
  * of truth; the constructor only guarantees it is internally consistent with [text].
  *
+ * On level 7 the text is a short sentence: units and syllables then cover the letters only, and
+ * the gaps between them hold spaces and punctuation, which the arrow skips.
+ *
  * @property image path of the picture shown after the child has read the word, if any.
  * @property wordAudio path of a recording of the whole word; when absent, TTS is used.
  */
@@ -20,33 +23,33 @@ data class Word(
     init {
         require(text.isNotEmpty()) { "Word '$id' has empty text" }
         require(level in Level.RANGE) { "Word '$id' has level $level outside ${Level.RANGE}" }
-        requireContiguous(units.map { it.startIndex to it.endIndex }, "units")
-        require(units.joinToString("") { it.grapheme } == text) {
-            "Word '$id': units ${units.map { it.grapheme }} do not spell '$text'"
-        }
-        requireContiguous(syllables.map { it.startIndex to it.endIndex }, "syllables")
-        require(syllables.joinToString("") { it.text } == text) {
-            "Word '$id': syllables ${syllables.map { it.text }} do not spell '$text'"
-        }
+        requireSpelled(units.map { Triple(it.grapheme, it.startIndex, it.endIndex) }, "units")
+        requireSpelled(syllables.map { Triple(it.text, it.startIndex, it.endIndex) }, "syllables")
     }
 
-    private fun requireContiguous(
-        ranges: List<Pair<Int, Int>>,
+    /** Parts in order spell every letter of [text]; only separators may lie between them. */
+    private fun requireSpelled(
+        parts: List<Triple<String, Int, Int>>,
         what: String,
     ) {
-        require(ranges.isNotEmpty()) { "Word '$id' has no $what" }
-        var expectedStart = 0
-        for ((start, end) in ranges) {
-            require(start == expectedStart) { "Word '$id': $what are not contiguous at index $start" }
-            expectedStart = end
+        require(parts.isNotEmpty()) { "Word '$id' has no $what" }
+        var covered = 0
+        for ((part, start, end) in parts) {
+            require(start >= covered && text.substring(covered, start).all(::isSeparator)) {
+                "Word '$id': $what skip letters or overlap at index $start"
+            }
+            require(end <= text.length && text.substring(start, end) == part && part.none(::isSeparator)) {
+                "Word '$id': $what ${parts.map { it.first }} do not spell '$text'"
+            }
+            covered = end
         }
-        require(expectedStart == text.length) { "Word '$id': $what do not cover the whole text" }
+        require(text.substring(covered).all(::isSeparator)) { "Word '$id': $what do not cover the whole text" }
     }
 
     companion object {
         /**
          * Builds a word from the dictionary format, where units and syllables are plain strings
-         * in reading order. Indices are computed from the order.
+         * in reading order. Indices are computed from the order, skipping separators in [text].
          *
          * @param phonemeIds phoneme id per unit; defaults to the lowercase grapheme.
          */
@@ -65,8 +68,8 @@ data class Word(
             require(phonemeIds.size == units.size) {
                 "Word '$id': ${phonemeIds.size} phoneme ids for ${units.size} units"
             }
-            val unitStarts = units.startOffsets()
-            val syllableStarts = syllables.startOffsets()
+            val unitStarts = units.startOffsetsIn(text)
+            val syllableStarts = syllables.startOffsetsIn(text)
             return Word(
                 id = WordId(id),
                 text = text,
@@ -83,7 +86,16 @@ data class Word(
             )
         }
 
-        private fun List<String>.startOffsets(): List<Int> = runningFold(0) { offset, part -> offset + part.length }
+        /** Spaces and punctuation between the words of a sentence: never part of a unit. */
+        fun isSeparator(char: Char): Boolean = !char.isLetter()
+
+        private fun List<String>.startOffsetsIn(text: String): List<Int> {
+            var offset = 0
+            return map { part ->
+                while (offset < text.length && isSeparator(text[offset])) offset++
+                offset.also { offset += part.length }
+            }
+        }
     }
 }
 

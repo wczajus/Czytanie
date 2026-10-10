@@ -17,12 +17,12 @@ class LevelRulesTest {
         syllables: String,
         level: Int,
     ): Word {
-        val units = segmenter.segment(text).units
+        val units = Regex("\\p{L}+").findAll(text).flatMap { segmenter.segment(it.value).units }.toList()
         return Word.fromAnnotation(
             id = text,
             text = text,
             units = units.map { it.grapheme },
-            syllables = syllables.split("-"),
+            syllables = syllables.split("-", " "),
             level = level,
             lessonId = "l$level",
             phonemeIds = units.map { it.phonemeId },
@@ -48,6 +48,8 @@ class LevelRulesTest {
         // Digraphs with a diacritic letter belong to level 6
         "dźwig, dźwig, 6",
         "dżem, dżem, 6",
+        // Level 7 holds short sentences
+        "Ala ma kota., A-la ma ko-ta, 7",
     )
     fun `word fits its level`(
         text: String,
@@ -82,6 +84,9 @@ class LevelRulesTest {
         "dżem, dżem, 5",
         // Level 6 needs softening or a diacritic
         "kot, kot, 6",
+        // Sentences only on level 7, and level 7 only sentences
+        "Ala ma kota., A-la ma ko-ta, 6",
+        "kot, kot, 7",
     )
     fun `word does not fit the level`(
         text: String,

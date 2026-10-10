@@ -79,6 +79,50 @@ class WordTest {
     }
 
     @Test
+    fun `units of a sentence skip spaces and punctuation`() {
+        val word = Word.fromAnnotation(
+            id = "ala-ma-kota",
+            text = "Ala ma kota.",
+            units = listOf("A", "l", "a", "m", "a", "k", "o", "t", "a"),
+            syllables = listOf("A", "la", "ma", "ko", "ta"),
+            level = 7,
+            lessonId = "l7",
+        )
+
+        word.units.map { it.startIndex } shouldContainExactly listOf(0, 1, 2, 4, 5, 7, 8, 9, 10)
+        word.units.first().phonemeId shouldBe "a"
+        word.syllables.map { it.startIndex } shouldContainExactly listOf(0, 1, 4, 7, 9)
+    }
+
+    @Test
+    fun `units must not skip letters`() {
+        shouldThrow<IllegalArgumentException> {
+            Word(
+                id = WordId("ala-ma"),
+                text = "Ala ma",
+                units = listOf(ReadingUnit("A", "a", 0, 1), ReadingUnit("m", "m", 4, 5), ReadingUnit("a", "a", 5, 6)),
+                syllables = listOf(Syllable("Ala", 0, 3), Syllable("ma", 4, 6)),
+                level = 7,
+                lessonId = LessonId("l7"),
+            )
+        }
+    }
+
+    @Test
+    fun `units must not cover spaces`() {
+        shouldThrow<IllegalArgumentException> {
+            Word.fromAnnotation(
+                id = "ala-ma",
+                text = "Ala ma",
+                units = listOf("A", "l", "a", " ", "m", "a"),
+                syllables = listOf("A", "la", "ma"),
+                level = 7,
+                lessonId = "l7",
+            )
+        }
+    }
+
+    @Test
     fun `unit range must match its grapheme`() {
         shouldThrow<IllegalArgumentException> { ReadingUnit("sz", "sz", 0, 1) }
     }

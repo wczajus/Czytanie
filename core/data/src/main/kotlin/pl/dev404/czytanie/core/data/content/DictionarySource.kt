@@ -9,7 +9,8 @@ fun interface DictionarySource {
     fun read(): String
 }
 
-class AssetDictionarySource @Inject constructor(@ApplicationContext private val context: Context) : DictionarySource {
+class AssetDictionarySource @Inject constructor(@param:ApplicationContext private val context: Context) :
+    DictionarySource {
     override fun read(): String = context.assets.open(PATH).bufferedReader().use { it.readText() }
 
     companion object {

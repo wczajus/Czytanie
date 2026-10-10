@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reading_back">Wróć do lekcji</string>
+    <string name="reading_progress">Wyraz %1$d z %2$d</string>
+    <string name="reading_start">Czytaj</string>
+    <string name="reading_pause">Pauza</string>
+    <string name="reading_resume">Czytaj dalej</string>
+    <string name="reading_repeat">Jeszcze raz</string>
+    <string name="reading_listen">Posłuchaj</string>
+    <string name="reading_next">Następny</string>
+    <string name="reading_lesson_finished_title">Brawo!</string>
+    <string name="reading_lesson_finished_message">Lekcja przeczytana.</string>
+    <string name="reading_read_lesson_again">Przeczytaj jeszcze raz</string>
+    <string name="reading_lesson_not_found">Nie udało się otworzyć tej lekcji.</string>
+</resources>

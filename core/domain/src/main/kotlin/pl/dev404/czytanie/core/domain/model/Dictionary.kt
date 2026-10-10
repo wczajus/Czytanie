@@ -9,7 +9,8 @@ data class Dictionary(
 )
 
 /**
- * A level of the progression (1 vowels … 7 short sentences).
+ * A level of the progression (1 vowels … 7 short sentences). Levels from [FIRST_STORY_LEVEL] on
+ * are stories (czytanki): one story per level, named after it, told in short sentences.
  *
  * @property lessons lesson ids in teaching order.
  */
@@ -19,8 +20,11 @@ data class Level(
     val lessons: List<LessonId>,
 ) {
     companion object {
-        /** Levels 1–7 from the design document; MVP ships levels 1–3. */
-        val RANGE = 1..7
+        const val FIRST_STORY_LEVEL = 8
+        private const val MAX_LEVEL = 99
+
+        /** Levels 1–7 from the design document, then the stories. */
+        val RANGE = 1..MAX_LEVEL
     }
 }
 

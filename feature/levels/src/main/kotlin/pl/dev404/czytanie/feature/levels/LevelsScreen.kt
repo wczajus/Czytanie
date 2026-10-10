@@ -88,7 +88,12 @@ private fun LevelSection(
     onLessonClick: (LessonId) -> Unit,
 ) = Column {
     Text(
-        text = stringResource(R.string.levels_level_title, level.id, level.name),
+        // A story (czytanka) is known by its title, not by a level number.
+        text = if (level.id >= Level.FIRST_STORY_LEVEL) {
+            level.name
+        } else {
+            stringResource(R.string.levels_level_title, level.id, level.name)
+        },
         style = MaterialTheme.typography.headlineSmall,
         modifier = Modifier.padding(bottom = ButtonSpacing),
     )

@@ -60,8 +60,8 @@ class WordTest {
     }
 
     @Test
-    fun `level outside 1 to 7 is rejected`() {
-        shouldThrow<IllegalArgumentException> { szafa(level = 8) }
+    fun `level outside the range is rejected`() {
+        shouldThrow<IllegalArgumentException> { szafa(level = 0) }
     }
 
     @Test

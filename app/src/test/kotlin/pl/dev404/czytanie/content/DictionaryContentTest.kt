@@ -33,7 +33,7 @@ class DictionaryContentTest {
     }
 
     @Test
-    fun `ships levels 1 to 7`() {
-        parsed.dictionary.shouldNotBeNull().levels.map { it.id } shouldBe (1..7).toList()
+    fun `ships levels 1 to 7 and the story Czarna owieczka`() {
+        parsed.dictionary.shouldNotBeNull().levels.map { it.id } shouldBe (1..8).toList()
     }
 }

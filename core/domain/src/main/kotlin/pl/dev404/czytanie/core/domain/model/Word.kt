@@ -24,13 +24,18 @@ data class Word(
         require(text.isNotEmpty()) { "Word '$id' has empty text" }
         require(level in Level.RANGE) { "Word '$id' has level $level outside ${Level.RANGE}" }
         requireSpelled(units.map { Triple(it.grapheme, it.startIndex, it.endIndex) }, "units")
-        requireSpelled(syllables.map { Triple(it.text, it.startIndex, it.endIndex) }, "syllables")
+        // "w" and "z" have no vowel and are read with the next word: "w domu" → "w do", "mu".
+        requireSpelled(syllables.map { Triple(it.text, it.startIndex, it.endIndex) }, "syllables", spansWords = true)
     }
 
-    /** Parts in order spell every letter of [text]; only separators may lie between them. */
+    /**
+     * Parts in order spell every letter of [text]; only separators may lie between them. With
+     * [spansWords] a part may also contain separators inside it, never at its edges.
+     */
     private fun requireSpelled(
         parts: List<Triple<String, Int, Int>>,
         what: String,
+        spansWords: Boolean = false,
     ) {
         require(parts.isNotEmpty()) { "Word '$id' has no $what" }
         var covered = 0
@@ -38,7 +43,12 @@ data class Word(
             require(start >= covered && text.substring(covered, start).all(::isSeparator)) {
                 "Word '$id': $what skip letters or overlap at index $start"
             }
-            require(end <= text.length && text.substring(start, end) == part && part.none(::isSeparator)) {
+            val separatorsAllowed = if (spansWords) {
+                part.first().isLetter() && part.last().isLetter()
+            } else {
+                part.none(::isSeparator)
+            }
+            require(end <= text.length && text.substring(start, end) == part && separatorsAllowed) {
                 "Word '$id': $what ${parts.map { it.first }} do not spell '$text'"
             }
             covered = end

@@ -77,7 +77,7 @@ build-logic/         convention plugins
 - Pliki: `app/src/main/assets/content/dictionary.json`, nagrania `assets/audio/phonemes/*.ogg`, `assets/audio/words/*.ogg`, obrazki `assets/images/*.webp`.
 - Import do Room przy pierwszym starcie i przy zmianie pola `version`.
 - Niezmienniki (sprawdzane testem walidatora na CAŁYM słowniku):
-  - `units.joinToString("") == text` oraz `syllables.joinToString("") == text`; w zdaniach (poziom 7) jednostki i sylaby pokrywają tylko litery, a spacje i interpunkcja leżą między nimi (D56)
+  - `units.joinToString("") == text` oraz `syllables.joinToString("") == text`; w zdaniach (poziom 7) jednostki i sylaby pokrywają tylko litery, a spacje i interpunkcja leżą między nimi (D56); wyjątek: sylaba łącząca „w”/„z” z następnym wyrazem zawiera spację w środku (D65)
   - każda jednostka ma wpis w `phonemes` i istniejący plik audio
   - poziom wyrazu zgodny z jego zawartością (np. poziom 3 nie zawiera dwuznaków)
 - Pułapki: „marznąć” (r+z osobno), „odzysk” (d+z osobno), zapożyczenia typu „pianino”. Przy dodawaniu wyrazów sprawdzaj je ręcznie.
@@ -137,7 +137,7 @@ Przed zakończeniem zadania zawsze uruchom `./gradlew check` i upewnij się, że
 7. **E6 Wydanie** — ikona, polityka prywatności, ankieta Families, ścieżka testów wewnętrznych.
 
 Nagrania głosek przygotowuje człowiek. Do czasu ich dostarczenia używaj plików zastępczych (cisza o zadanej długości) i oznacz to w kodzie `// TODO(audio)`.
-Nagrania sylab (`assets/audio/syllables/`, nazwy wg `Syllable.audioPathOf`) są tymczasowo syntetyczne: generuje je offline `tools/generate-syllable-audio.py` (espeak-ng) przed buildem, nigdy w aplikacji (D64). Po dodaniu wyrazów uruchom skrypt ponownie; walidator wymaga nagrania każdej sylaby.
+Nagrania sylab (`assets/audio/syllables/`, nazwy wg `Syllable.audioPathOf`) są tymczasowo syntetyczne: generuje je `tools/generate-syllable-audio.py` (neuronowy polski głos Piper, offline) przed buildem, nigdy w aplikacji (D64, D66). Podział na sylaby w zdaniach i czytankach: `tools/syllabify.py`, „w”/„z” łączą się z następnym wyrazem (D65). Po dodaniu wyrazów uruchom skrypt ponownie; walidator wymaga nagrania każdej sylaby.
 
 ## Czego NIE robić
 

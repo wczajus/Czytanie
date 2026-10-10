@@ -55,8 +55,8 @@ class DataStoreSettingsRepositoryTest {
     fun `tempo is kept within the allowed range`() = runTest {
         val repository = repository()
 
-        repository.setTempo(50)
-        repository.settings.first().tempoMillis shouldBe 300
+        repository.setTempo(20)
+        repository.settings.first().tempoMillis shouldBe 100
         repository.setTempo(10_000)
         repository.settings.first().tempoMillis shouldBe 1500
     }

@@ -6,7 +6,7 @@ dlatego nie trafiają do aplikacji.
 
 Przepisane ręcznie ze skanu (PDF bez warstwy tekstowej, 15 stron). W skanie brakuje części stron
 książki, więc tekst ma luki, oznaczone `[…]`. Na tej podstawie powstała czytanka w aplikacji
-(poziom 8, zob. D58): krótkie zdania opowiadające tę historię, a nie pełny tekst.
+(poziom 8, zob. D58 i D60): pełny tekst, akapit po akapicie (luki pominięte).
 
 ---
 

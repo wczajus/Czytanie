@@ -282,3 +282,20 @@ ilustracji Marii Orłowskiej-Gabryś nie używamy, bo są chronione).
 jedna jednostka**, tak jak „si” czy „ni”, z własną głoską (`wi`, `pi`, nagrania zastępcze). Segmentator
 tego jeszcze nie proponuje (zostaje podpowiedź „sprawdź ręcznie”, bo pułapki typu „pianino” czytają
 „i” osobno), więc te wyrazy są anotowane ręcznie, a walidator zgłasza tylko ostrzeżenia (D24).
+
+**D60. Czytanka zawiera pełny tekst opowiadania** (zastępuje skróconą wersję z D58, na prośbę
+właściciela). Każdy akapit oryginału to jedna pozycja poziomu 8, łamana na wiele wierszy
+(`ReadingPassage`): wysoka interlinia zostawia miejsce na strzałkę pod bieżącym wierszem, przy zmianie
+wiersza strzałka przeskakuje (nie sunie po tekście), a akapit przewija się, żeby bieżący wiersz był w
+górnej jednej trzeciej ekranu. Akapity z jednego wyrazu są dołączone do poprzedniego (reguła ≥ 2
+wyrazów). Podział na sylaby w czytance jest przybliżony automatycznie (V-CV, VC-CV) i nie jest
+pokazywany dziecku; jednostki pochodzą z segmentatora i są sprawdzone walidatorem. 82 akapity w 9
+lekcjach.
+
+**D61. Segmentator łączy spółgłoskę z „i” przed samogłoską** (b p m w f k g l h ch + i + samogłoska →
+„pi”, „wi”, „ki”…), czyli proponuje to, co D59 opisywało jako anotację ręczną. Zawsze zostawia
+podpowiedź „sprawdź ręcznie”, bo zapożyczenia („pianino”, „Maria”) czytają „i” osobno. Nowe głoski
+`bi gi ki mi` mają nagrania zastępcze.
+
+**D62. Tempo od 0,1 s na głoskę** (było od 0,3 s), krok suwaka 0,1 s. Szybkie tempo jest dla dzieci,
+które już czytają płynnie dłuższe teksty; domyślne tempo się nie zmienia (0,9 s).

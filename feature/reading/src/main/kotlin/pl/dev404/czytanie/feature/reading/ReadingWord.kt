@@ -130,12 +130,12 @@ private val ArrowWidth = 36.dp
 private val ArrowGap = 8.dp
 
 /** Where the arrow should be and how long it may take to get there. */
-private data class ArrowTarget(
+internal data class ArrowTarget(
     val index: Int,
     val moveMillis: Int,
 )
 
-private fun ReadingState.arrowTarget(): ArrowTarget = when (this) {
+internal fun ReadingState.arrowTarget(): ArrowTarget = when (this) {
     is ReadingState.Pointing -> ArrowTarget(
         index = index,
         moveMillis = (tempoMillis * ARROW_MOVE_SHARE).toInt().coerceAtMost(ARROW_MOVE_MAX_MILLIS),
@@ -149,13 +149,13 @@ private fun ReadingState.arrowTarget(): ArrowTarget = when (this) {
  * Horizontal centre of [unit]: between the left edge of its first character and the right edge
  * of its last one, so a digraph like "sz" gets the arrow under its middle.
  */
-private fun TextLayoutResult.centerOf(unit: ReadingUnit): Float {
+internal fun TextLayoutResult.centerOf(unit: ReadingUnit): Float {
     val first = getBoundingBox(unit.startIndex)
     val last = getBoundingBox(unit.lastIndex)
     return (first.left + last.right) / 2
 }
 
-private fun Word.highlighted(
+internal fun Word.highlighted(
     state: ReadingState,
     colors: ReadingColors,
 ): AnnotatedString {

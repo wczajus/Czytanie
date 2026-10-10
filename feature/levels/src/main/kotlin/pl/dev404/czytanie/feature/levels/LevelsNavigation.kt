@@ -9,6 +9,9 @@ import pl.dev404.czytanie.core.domain.model.LessonId
 @Serializable
 data object LevelsRoute
 
-fun NavGraphBuilder.levelsScreen(onLessonClick: (LessonId) -> Unit) {
-    composable<LevelsRoute> { LevelsScreenRoute(onLessonClick = onLessonClick) }
+fun NavGraphBuilder.levelsScreen(
+    onLessonClick: (LessonId) -> Unit,
+    onParentClick: () -> Unit,
+) {
+    composable<LevelsRoute> { LevelsScreenRoute(onLessonClick = onLessonClick, onParentClick = onParentClick) }
 }

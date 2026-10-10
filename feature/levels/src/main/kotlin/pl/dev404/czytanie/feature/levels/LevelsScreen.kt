@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,11 +18,14 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,18 +37,20 @@ import pl.dev404.czytanie.core.ui.theme.CzytanieTheme
 @Composable
 internal fun LevelsScreenRoute(
     onLessonClick: (LessonId) -> Unit,
+    onParentClick: () -> Unit,
     viewModel: LevelsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    LevelsScreen(state = state, onLessonClick = onLessonClick)
+    LevelsScreen(state = state, onLessonClick = onLessonClick, onParentClick = onParentClick)
 }
 
-/** Simple list of levels and their lessons. Progress and the parent's area arrive in E5. */
+/** Levels and their lessons; a star marks a lesson the child has read well. */
 @Composable
 internal fun LevelsScreen(
     state: LevelsUiState,
     onLessonClick: (LessonId) -> Unit,
     modifier: Modifier = Modifier,
+    onParentClick: () -> Unit = {},
 ) {
     Surface(modifier = modifier.fillMaxSize()) {
         when (state) {
@@ -57,13 +63,17 @@ internal fun LevelsScreen(
                 verticalArrangement = Arrangement.spacedBy(SectionSpacing),
             ) {
                 item {
-                    Text(
-                        text = stringResource(R.string.levels_title),
-                        style = MaterialTheme.typography.displaySmall,
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(R.string.levels_title),
+                            style = MaterialTheme.typography.displaySmall,
+                            modifier = Modifier.weight(1f),
+                        )
+                        TextButton(onClick = onParentClick) { Text(stringResource(R.string.levels_for_parent)) }
+                    }
                 }
                 items(state.levels, key = { it.id }) { level ->
-                    LevelSection(level = level, onLessonClick = onLessonClick)
+                    LevelSection(level = level, passedLessons = state.passedLessons, onLessonClick = onLessonClick)
                 }
             }
         }
@@ -74,6 +84,7 @@ internal fun LevelsScreen(
 @Composable
 private fun LevelSection(
     level: Level,
+    passedLessons: Set<LessonId>,
     onLessonClick: (LessonId) -> Unit,
 ) = Column {
     Text(
@@ -91,9 +102,13 @@ private fun LevelSection(
                 onClick = { onLessonClick(lessonId) },
                 modifier = Modifier.sizeIn(minWidth = LessonButtonSize, minHeight = LessonButtonSize),
             ) {
+                val passed = lessonId in passedLessons
+                val label = stringResource(R.string.levels_lesson, index + 1)
+                val passedDescription = stringResource(R.string.levels_lesson_passed, index + 1)
                 Text(
-                    text = stringResource(R.string.levels_lesson, index + 1),
+                    text = if (passed) "$label ★" else label,
                     style = MaterialTheme.typography.titleLarge,
+                    modifier = if (passed) Modifier.semantics { contentDescription = passedDescription } else Modifier,
                 )
             }
         }

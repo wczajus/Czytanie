@@ -8,8 +8,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import pl.dev404.czytanie.feature.levels.LevelsRoute
 import pl.dev404.czytanie.feature.levels.levelsScreen
+import pl.dev404.czytanie.feature.parent.ParentPanelRoute
+import pl.dev404.czytanie.feature.parent.lessonRatingScreen
+import pl.dev404.czytanie.feature.parent.navigateToLessonRating
+import pl.dev404.czytanie.feature.parent.navigateToParentPanel
+import pl.dev404.czytanie.feature.parent.parentPanelScreen
 import pl.dev404.czytanie.feature.reading.navigateToReading
 import pl.dev404.czytanie.feature.reading.readingScreen
+import pl.dev404.czytanie.feature.settings.navigateToSettings
+import pl.dev404.czytanie.feature.settings.settingsScreen
 
 /** The only place that knows about all features; features never depend on each other. */
 @Composable
@@ -20,8 +27,15 @@ fun CzytanieNavHost(modifier: Modifier = Modifier) {
         startDestination = LevelsRoute,
         modifier = modifier.fillMaxSize().safeDrawingPadding(),
     ) {
-        levelsScreen(onLessonClick = navController::navigateToReading)
         // Popping to the list (not just once) keeps a quick double tap from emptying the back stack.
-        readingScreen(onBack = { navController.popBackStack(LevelsRoute, inclusive = false) })
+        val backToLevels: () -> Unit = { navController.popBackStack(LevelsRoute, inclusive = false) }
+        levelsScreen(
+            onLessonClick = navController::navigateToReading,
+            onParentClick = navController::navigateToParentPanel,
+        )
+        readingScreen(onBack = backToLevels, onRateLesson = navController::navigateToLessonRating)
+        parentPanelScreen(onBack = backToLevels, onOpenSettings = navController::navigateToSettings)
+        lessonRatingScreen(onDone = backToLevels)
+        settingsScreen(onBack = { navController.popBackStack(ParentPanelRoute, inclusive = false) })
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parent_panel_title">Dla rodzica</string>
+    <string name="parent_back">Wróć</string>
+    <string name="parent_open_settings">Ustawienia czytania</string>
+    <string name="parent_history_title">Historia czytania</string>
+    <string name="parent_history_empty">Tu pojawią się oceny przeczytanych wyrazów.</string>
+    <string name="parent_word_removed">(wyraz usunięty ze słownika)</string>
+    <string name="parent_rating_read">Przeczytane</string>
+    <string name="parent_rating_with_help">Z pomocą</string>
+    <string name="parent_rating_not_yet">Jeszcze nie</string>
+    <string name="parent_rate_title">Jak poszło czytanie?</string>
+    <string name="parent_rate_hint">Oceń wyrazy, które dziecko przeczytało. Nieocenione wyrazy nie są zapisywane.</string>
+    <string name="parent_rate_save">Zapisz</string>
+    <string name="parent_lesson_not_found">Nie udało się otworzyć tej lekcji.</string>
+</resources>

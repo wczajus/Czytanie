@@ -16,6 +16,10 @@ data class ReadingRoute(val lessonId: String) {
 
 fun NavController.navigateToReading(lessonId: LessonId) = navigate(ReadingRoute(lessonId.value))
 
-fun NavGraphBuilder.readingScreen(onBack: () -> Unit) {
-    composable<ReadingRoute> { ReadingScreenRoute(onBack = onBack) }
+/** @param onRateLesson opens the parent's rating of the lesson (behind the parental gate). */
+fun NavGraphBuilder.readingScreen(
+    onBack: () -> Unit,
+    onRateLesson: (LessonId) -> Unit,
+) {
+    composable<ReadingRoute> { ReadingScreenRoute(onBack = onBack, onRateLesson = onRateLesson) }
 }

@@ -163,7 +163,7 @@ class ReadingViewModelTest {
         readWholeWord(TestWords.szafa.units.size)
         viewModel.onEvent(ReadingEvent.Next)
         runCurrent()
-        states.expectMostRecentItem() shouldBe ReadingUiState.LessonFinished(wordCount = 2)
+        states.expectMostRecentItem() shouldBe ReadingUiState.LessonFinished(TestWords.lesson.id)
 
         viewModel.onEvent(ReadingEvent.ReadLessonAgain)
         runCurrent()

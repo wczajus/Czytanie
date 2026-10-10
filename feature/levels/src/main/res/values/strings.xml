@@ -3,4 +3,6 @@
     <string name="levels_title">Czytanie</string>
     <string name="levels_level_title">Poziom %1$d: %2$s</string>
     <string name="levels_lesson">Lekcja %1$d</string>
+    <string name="levels_lesson_passed">Lekcja %1$d, przeczytana</string>
+    <string name="levels_for_parent">Dla rodzica</string>
 </resources>

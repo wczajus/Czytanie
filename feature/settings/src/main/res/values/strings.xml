@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Ustawienia czytania</string>
+    <string name="settings_back">Wróć</string>
+    <string name="settings_tempo">Tempo strzałki</string>
+    <string name="settings_tempo_value">%1$.1f s na głoskę</string>
+    <string name="settings_tempo_slower">wolniej</string>
+    <string name="settings_tempo_faster">szybciej</string>
+    <string name="settings_phonemes">Odtwarzaj głoski</string>
+    <string name="settings_phonemes_hint">Dziecko słyszy każdą głoskę, gdy strzałka do niej dojdzie.</string>
+    <string name="settings_font_size">Wielkość wyrazu</string>
+    <string name="settings_font_medium">Duża</string>
+    <string name="settings_font_large">Bardzo duża</string>
+    <string name="settings_font_extra_large">Największa</string>
+    <string name="settings_preview_word">szafa</string>
+</resources>

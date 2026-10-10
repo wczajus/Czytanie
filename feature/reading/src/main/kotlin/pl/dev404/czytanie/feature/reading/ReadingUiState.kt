@@ -1,5 +1,6 @@
 package pl.dev404.czytanie.feature.reading
 
+import pl.dev404.czytanie.core.domain.model.LessonId
 import pl.dev404.czytanie.core.domain.model.Word
 import pl.dev404.czytanie.core.domain.pacing.ReadingState
 import pl.dev404.czytanie.core.domain.settings.WordFontSize
@@ -40,7 +41,8 @@ sealed interface ReadingUiState {
         val image: String? get() = word.image.takeIf { isWordDone }
     }
 
-    data class LessonFinished(val wordCount: Int) : ReadingUiState
+    /** The praise screen. Counts nothing: no score, no mistakes. */
+    data class LessonFinished(val lessonId: LessonId) : ReadingUiState
 }
 
 sealed interface ReadingEvent {

@@ -28,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
@@ -51,16 +52,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import pl.dev404.czytanie.core.domain.model.LessonId
 import pl.dev404.czytanie.core.domain.pacing.ReadingState
 import pl.dev404.czytanie.core.ui.theme.readingWordStyle
 
 @Composable
 internal fun ReadingScreenRoute(
     onBack: () -> Unit,
+    onRateLesson: (LessonId) -> Unit = {},
     viewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    ReadingScreen(state = state, onEvent = viewModel::onEvent, onBack = onBack)
+    ReadingScreen(state = state, onEvent = viewModel::onEvent, onBack = onBack, onRateLesson = onRateLesson)
 }
 
 @Composable
@@ -69,6 +72,7 @@ internal fun ReadingScreen(
     onEvent: (ReadingEvent) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    onRateLesson: (LessonId) -> Unit = {},
 ) {
     Surface(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize().padding(ScreenPadding)) {
@@ -87,8 +91,15 @@ internal fun ReadingScreen(
             Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
                 when (state) {
                     ReadingUiState.Loading -> CircularProgressIndicator()
+
                     ReadingUiState.LessonNotFound -> Message(stringResource(R.string.reading_lesson_not_found))
-                    is ReadingUiState.LessonFinished -> LessonFinished(onEvent = onEvent, onBack = onBack)
+
+                    is ReadingUiState.LessonFinished -> LessonFinished(
+                        onEvent = onEvent,
+                        onBack = onBack,
+                        onRate = { onRateLesson(state.lessonId) },
+                    )
+
                     is ReadingUiState.Reading -> WordArea(state = state, onEvent = onEvent)
                 }
             }
@@ -236,8 +247,10 @@ private fun ProgressDots(
 private fun LessonFinished(
     onEvent: (ReadingEvent) -> Unit,
     onBack: () -> Unit,
+    onRate: () -> Unit,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        PraiseStar(modifier = Modifier.size(PraiseStarSize))
         Text(
             text = stringResource(R.string.reading_lesson_finished_title),
             style = MaterialTheme.typography.displayLarge,
@@ -262,6 +275,10 @@ private fun LessonFinished(
                 primary = true,
                 onClick = onBack,
             )
+        }
+        // For the adult next to the child; the rating screen itself is behind the parental gate.
+        TextButton(onClick = onRate, modifier = Modifier.padding(top = ButtonSpacing)) {
+            Text(stringResource(R.string.reading_rate_lesson), style = MaterialTheme.typography.bodyLarge)
         }
     }
 }
@@ -310,3 +327,4 @@ private val IconSize = 36.dp
 private val DotSize = 12.dp
 private val DotSpacing = 6.dp
 private val ImageSize = 200.dp
+private val PraiseStarSize = 120.dp

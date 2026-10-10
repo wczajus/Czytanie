@@ -157,8 +157,8 @@ jako całość, a nie jako ciąg wyszarzonych liter. Obrazek (jeśli jest) pojaw
 **D34. Długi wyraz jest zmniejszany, żeby zmieścił się w jednej linii.** Wybrany rozmiar (D18)
 pozostaje górną granicą; wyrazu nigdy nie dzielimy na linie.
 
-**D35. Do czasu E4 aplikacja używa `SilentSpeechPlayer`** (TODO(audio)): nic nie odtwarza, więc
-strzałka idzie w samym tempie, a „Posłuchaj” jest cichy.
+**D35. Do czasu E4 aplikacja używała `SilentSpeechPlayer`**, który nic nie odtwarzał. Od E4 zastępuje
+go `AndroidSpeechPlayer` (D39).
 
 **D36. Lista poziomów to na razie prosta lista lekcji** („Poziom 1: Samogłoski”, „Lekcja 1”…), żeby
 ekran czytania był dostępny w wydaniu. Postępy, bramka i panel rodzica dochodzą w E5.
@@ -170,3 +170,28 @@ Androida w środowisku Claude nie ma, więc pierwsze zrzuty nagrywa CI i wypisuj
 
 **D38. detekt dopuszcza stałe `SCREAMING_CASE` obok `PascalCase`** (wzorzec `[A-Z][A-Za-z0-9_]*`),
 bo stałe `const val` w Kotlinie tradycyjnie mają podkreślenia, a wartości `Dp` w Compose nie.
+
+## Dźwięk (E4)
+
+**D39. Trzy odtwarzacze za jednym `SpeechPlayer`.** Głoski: `SoundPool` (`SoundPoolClipPlayer`,
+małe opóźnienie). Cały wyraz: nagranie z `MediaPlayer`, jeśli słownik je ma, w przeciwnym razie TTS.
+`AndroidSpeechPlayer` tylko wybiera źródło, więc reguły („głoska nigdy z TTS”, „uszkodzone nagranie
+wyrazu → TTS”) są testowane na JVM z fałszywymi odtwarzaczami.
+
+**D40. Długość nagrania głoski czytamy przy ładowaniu** (`MediaMetadataRetriever`), bo `SoundPool` nie
+zgłasza końca odtwarzania. `playPhoneme` wraca po tym czasie, więc silnik może czekać na nagranie (D11).
+Nieznana długość = 0 ms: strzałka idzie wtedy w samym tempie.
+
+**D41. Lekcja wczytuje swoje głoski z góry** (`SpeechPlayer.prepare` przy otwarciu lekcji). Głoska
+spoza listy ładuje się przy pierwszym użyciu. Nagrania zostają w pamięci do końca procesu (kilkadziesiąt
+krótkich plików).
+
+**D42. TTS tylko z polskim głosem offline.** Bez polskiego głosu wyraz nie jest czytany wcale (głos
+innego języka uczyłby złej wymowy), a przycisk „Posłuchaj” znika, zostawiając puste miejsce, żeby
+pozostałe przyciski się nie przesuwały. Głosy sieciowe pomijamy, żeby nic z lekcji nie opuszczało
+urządzenia. Silnik TTS startuje przy pierwszym sprawdzeniu, a nie razem z aplikacją. Locale to
+`Locale.forLanguageTag("pl-PL")`, bo konstruktor `Locale("pl", "PL")` jest przestarzały, a ostrzeżenia
+są błędami (D5).
+
+**D43. Nagrania `.ogg` nie są kompresowane w APK** (`noCompress`), bo `openFd` wymaga
+nieskompresowanych zasobów.

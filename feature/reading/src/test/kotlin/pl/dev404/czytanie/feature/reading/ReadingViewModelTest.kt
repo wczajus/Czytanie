@@ -173,6 +173,34 @@ class ReadingViewModelTest {
     }
 
     @Test
+    fun `the lesson's sounds are prepared when it opens`() = test { _, _ ->
+        advanceUntilIdle()
+        speechPlayer.prepared shouldContainExactly TestWords.lesson.words
+    }
+
+    @Test
+    fun `listening is not offered when the word cannot be heard`() = runTest(main.dispatcher) {
+        val silentPlayer = FakeSpeechPlayer(wordsCanBeHeard = false)
+        val viewModel = ReadingViewModel(
+            savedStateHandle = SavedStateHandle(mapOf(ReadingRoute.LESSON_ID_KEY to TestWords.LESSON_ID)),
+            dictionaryRepository = FakeDictionaryRepository(),
+            settingsRepository = FakeSettingsRepository(ReadingSettings(tempoMillis = TEMPO)),
+            speechPlayer = silentPlayer,
+        )
+        viewModel.uiState.test {
+            advanceUntilIdle()
+            viewModel.onEvent(ReadingEvent.MainAction)
+            readWholeWord(TestWords.mama.units.size)
+            val done = reading()
+            done.canPlayWordAudio shouldBe false
+            done.canListen shouldBe false
+            viewModel.onEvent(ReadingEvent.Listen)
+            advanceUntilIdle()
+            silentPlayer.words.shouldBeEmpty()
+        }
+    }
+
+    @Test
     fun `font size comes from settings`() = runTest(main.dispatcher) {
         val viewModel = viewModel(settings = ReadingSettings(fontSize = WordFontSize.ExtraLarge))
         viewModel.uiState.test {

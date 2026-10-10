@@ -14,6 +14,8 @@ sealed interface ReadingUiState {
      *
      * @property wordIndex position of [word] in the lesson, from 0.
      * @property isPlayingWord the whole word is being played after the child asked for it.
+     * @property canPlayWordAudio the word can be heard at all: it has a recording or a Polish
+     *   TTS voice is installed. Without either, "posłuchaj" is not offered.
      */
     data class Reading(
         val word: Word,
@@ -22,11 +24,12 @@ sealed interface ReadingUiState {
         val readingState: ReadingState,
         val fontSize: WordFontSize,
         val isPlayingWord: Boolean = false,
+        val canPlayWordAudio: Boolean = true,
     ) : ReadingUiState {
         val isWordDone: Boolean get() = readingState == ReadingState.WordDone
 
         /** The whole word may be heard only after the arrow has passed it: the child reads first. */
-        val canListen: Boolean get() = isWordDone && !isPlayingWord
+        val canListen: Boolean get() = canPlayWordAudio && isWordDone && !isPlayingWord
 
         val canGoNext: Boolean get() = isWordDone
 

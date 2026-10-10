@@ -10,6 +10,7 @@ import pl.dev404.czytanie.core.domain.content.DictionaryRepository
 import pl.dev404.czytanie.core.domain.model.Lesson
 import pl.dev404.czytanie.core.domain.model.LessonId
 import pl.dev404.czytanie.core.domain.model.Level
+import pl.dev404.czytanie.core.domain.model.Phoneme
 import pl.dev404.czytanie.core.domain.model.Word
 import pl.dev404.czytanie.core.domain.model.WordId
 
@@ -39,6 +40,11 @@ class RoomDictionaryRepository @Inject constructor(
     override suspend fun word(id: WordId): Word? {
         importer.ensureUpToDate()
         return dao.word(id.value)?.toDomain()
+    }
+
+    override suspend fun phonemes(): List<Phoneme> {
+        importer.ensureUpToDate()
+        return dao.phonemes().map { Phoneme(id = it.id, grapheme = it.grapheme, audio = it.audio) }
     }
 
     private fun WordEntity.toDomain() = Word.fromAnnotation(

@@ -18,6 +18,7 @@ import pl.dev404.czytanie.core.domain.audio.SpeechPlayer
 import pl.dev404.czytanie.core.domain.content.DictionaryRepository
 import pl.dev404.czytanie.core.domain.model.Lesson
 import pl.dev404.czytanie.core.domain.model.LessonId
+import pl.dev404.czytanie.core.domain.model.WordId
 import pl.dev404.czytanie.core.domain.pacing.PacingEngine
 import pl.dev404.czytanie.core.domain.pacing.ReadingState
 import pl.dev404.czytanie.core.domain.settings.ReadingSettings
@@ -36,27 +37,14 @@ class ReadingViewModel @Inject constructor(
     private val progress = MutableStateFlow<Progress>(Progress.Loading)
     private val settings = MutableStateFlow(ReadingSettings())
     private val isPlayingWord = MutableStateFlow(false)
+
+    /** Words that cannot be heard (no recording and no Polish voice); empty until checked. */
+    private val silentWords = MutableStateFlow<Set<WordId>>(emptySet())
     private var wordPlayback: Job? = null
 
     val uiState: StateFlow<ReadingUiState> =
-        combine(progress, engine.state, settings, isPlayingWord) { progress, readingState, settings, playing ->
-            when (progress) {
-                Progress.Loading -> ReadingUiState.Loading
-
-                Progress.NotFound -> ReadingUiState.LessonNotFound
-
-                is Progress.Finished -> ReadingUiState.LessonFinished(progress.lesson.words.size)
-
-                is Progress.AtWord -> ReadingUiState.Reading(
-                    word = progress.lesson.words[progress.index],
-                    wordIndex = progress.index,
-                    wordCount = progress.lesson.words.size,
-                    readingState = readingState,
-                    fontSize = settings.fontSize,
-                    isPlayingWord = playing,
-                )
-            }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), ReadingUiState.Loading)
+        combine(progress, engine.state, settings, isPlayingWord, silentWords, ::toUiState)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), ReadingUiState.Loading)
 
     init {
         settingsRepository.settings
@@ -67,9 +55,38 @@ class ReadingViewModel @Inject constructor(
             .launchIn(viewModelScope)
         viewModelScope.launch {
             val lesson = dictionaryRepository.lesson(lessonId)
-            progress.value =
-                if (lesson == null || lesson.words.isEmpty()) Progress.NotFound else Progress.AtWord(lesson, 0)
+            if (lesson == null || lesson.words.isEmpty()) {
+                progress.value = Progress.NotFound
+                return@launch
+            }
+            progress.value = Progress.AtWord(lesson, 0)
+            launch { speechPlayer.prepare(lesson.words) }
+            silentWords.value = lesson.words.filterNot { speechPlayer.canPlayWord(it) }.map { it.id }.toSet()
         }
+    }
+
+    private fun toUiState(
+        progress: Progress,
+        readingState: ReadingState,
+        settings: ReadingSettings,
+        isPlayingWord: Boolean,
+        silentWords: Set<WordId>,
+    ): ReadingUiState = when (progress) {
+        Progress.Loading -> ReadingUiState.Loading
+
+        Progress.NotFound -> ReadingUiState.LessonNotFound
+
+        is Progress.Finished -> ReadingUiState.LessonFinished(progress.lesson.words.size)
+
+        is Progress.AtWord -> ReadingUiState.Reading(
+            word = progress.word,
+            wordIndex = progress.index,
+            wordCount = progress.lesson.words.size,
+            readingState = readingState,
+            fontSize = settings.fontSize,
+            isPlayingWord = isPlayingWord,
+            canPlayWordAudio = progress.word.id !in silentWords,
+        )
     }
 
     fun onEvent(event: ReadingEvent) {
@@ -100,6 +117,7 @@ class ReadingViewModel @Inject constructor(
     private fun listen() {
         val atWord = progress.value as? Progress.AtWord ?: return
         if (engine.state.value != ReadingState.WordDone || wordPlayback?.isActive == true) return
+        if (atWord.word.id in silentWords.value) return
         isPlayingWord.value = true
         wordPlayback = viewModelScope.launch {
             try {

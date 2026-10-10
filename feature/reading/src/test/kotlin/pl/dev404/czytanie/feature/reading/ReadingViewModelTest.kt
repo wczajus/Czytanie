@@ -173,9 +173,10 @@ class ReadingViewModelTest {
     }
 
     @Test
-    fun `the lesson's sounds are prepared when it opens`() = test { _, _ ->
+    fun `the lesson's sounds are prepared when it opens`() = test { _, states ->
         advanceUntilIdle()
         speechPlayer.prepared shouldContainExactly TestWords.lesson.words
+        states.cancelAndIgnoreRemainingEvents()
     }
 
     @Test

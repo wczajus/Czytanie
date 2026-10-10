@@ -237,3 +237,20 @@ adresu e-mail w aplikacji: kontaktem jest adres dewelopera w karcie Google Play.
 Z sekretem `PLAY_SERVICE_ACCOUNT_JSON` i kluczem wydania AAB trafia sam do ścieżki testów
 wewnętrznych (`r0adkll/upload-google-play`). Bez nich krok jest pomijany. Formularze Play Console
 (Families, Data safety, IARC) wypełnia właściciel konta według `doc/google-play/README.md`.
+
+## Po MVP: poziomy 4–6
+
+**D53. Słownik w wersji 2 ma poziomy 4–6** (111 nowych wyrazów w 12 lekcjach): 4 — sylaby zamknięte,
+zbitki i nowe litery c, h, j; 5 — sz, cz, rz, ch, dz; 6 — si ci zi ni dzi, litery ze znakami i
+dwuznaki dż, dź. Unikane są wyrazy, w których „i” przed samogłoską tylko zmiękcza spółgłoskę inną niż
+s c z n dz („pies”, „kwiat”, „wiosna”), bo tego nie opisuje jeszcze żadna jednostka. Poziom 7
+(zdania) wymaga najpierw obsługi spacji i interpunkcji na ekranie czytania.
+
+**D54. „dż” i „dź” należą do poziomu 6**, bo mają literę ze znakiem (D22). `LevelRules` uznaje
+jednostkę za poziom 6, gdy którakolwiek jej litera jest diakrytyczna.
+
+**D55. Jedno nagranie na grafem**, także gdy dwa grafemy brzmią tak samo („rz”/„ż”, „ch”/„h”,
+„ó”/„u”, „si”/„ś”). `phonemeId` zgadza się wtedy z propozycją `GraphemeSegmenter`, a lektor może
+nagrać ten sam dźwięk dwa razy. Pole `note` w słowniku mówi, jak czytać grafem. Nazwy plików są w
+ASCII (`z_dot.ogg`, `a_nasal.ogg`, `dz_acute.ogg`), żeby uniknąć problemów z kodowaniem w APK i
+narzędziach. Nowe nagrania to cisza zastępcza (D26, TODO(audio)).

@@ -13,14 +13,15 @@ import pl.dev404.czytanie.core.domain.model.Word
  * 3. two or more open syllables of simple graphemes ("mama");
  * 4. simple graphemes only, closed syllables and clusters allowed ("kot", "sklep");
  * 5. at least one digraph, no soft consonants or diacritics ("szafa");
- * 6. at least one soft consonant or diacritic letter ("siano", "koń");
+ * 6. at least one soft consonant or diacritic letter ("siano", "koń"), including the digraphs
+ *    written with one ("dź", "dż");
  * 7. anything (short sentences, after MVP).
  */
 object LevelRules {
     private val VOWELS = setOf("a", "e", "i", "o", "u", "y")
     private val DIGRAPHS = setOf("sz", "cz", "rz", "ch", "dz", "dź", "dż")
     private val SOFT_PHONEMES = setOf("si", "ci", "zi", "ni", "dzi")
-    private val DIACRITIC_LETTERS = setOf("ą", "ę", "ó", "ł", "ś", "ć", "ź", "ń", "ż")
+    private val DIACRITIC_LETTERS = setOf('ą', 'ę', 'ó', 'ł', 'ś', 'ć', 'ź', 'ń', 'ż')
 
     private const val VOWELS_LEVEL = 1
     private const val SYLLABLES_LEVEL = 2
@@ -74,7 +75,7 @@ object LevelRules {
 
     private val ReadingUnit.isDigraph get() = key in DIGRAPHS
 
-    private val ReadingUnit.isSoft get() = phonemeId in SOFT_PHONEMES || key in DIACRITIC_LETTERS
+    private val ReadingUnit.isSoft get() = phonemeId in SOFT_PHONEMES || key.any { it in DIACRITIC_LETTERS }
 
     private val ReadingUnit.isSimple get() = !isDigraph && !isSoft
 

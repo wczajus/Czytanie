@@ -13,4 +13,13 @@
     <string name="parent_rate_hint">Oceń wyrazy, które dziecko przeczytało. Nieocenione wyrazy nie są zapisywane.</string>
     <string name="parent_rate_save">Zapisz</string>
     <string name="parent_lesson_not_found">Nie udało się otworzyć tej lekcji.</string>
+    <string name="parent_open_privacy">Prywatność</string>
+    <string name="privacy_title">Polityka prywatności</string>
+    <string name="privacy_summary">Czytanie nie zbiera, nie wysyła i nie udostępnia żadnych danych dziecka ani rodzica.</string>
+    <string name="privacy_no_network">Aplikacja nie ma dostępu do internetu: nie ma uprawnienia do sieci, reklam, analityki ani zgłaszania błędów przez internet.</string>
+    <string name="privacy_stored_data">Na urządzeniu zapisywane są tylko ustawienia czytania (tempo, głoski, rozmiar wyrazów) oraz oceny przeczytanych wyrazów wystawione przez rodzica, razem z datą. Nie zapisujemy imienia, wieku, nagrań głosu, zdjęć ani lokalizacji.</string>
+    <string name="privacy_no_third_parties">Dane nie trafiają do nas ani do innych firm. Nie są też kopiowane do kopii zapasowej w chmurze.</string>
+    <string name="privacy_tts">Cały wyraz może przeczytać syntezator mowy wbudowany w telefon, wyłącznie z polskim głosem zainstalowanym na urządzeniu. Aplikacja nie korzysta z głosów sieciowych.</string>
+    <string name="privacy_deletion">Wszystkie dane usuniesz, odinstalowując aplikację albo czyszcząc jej dane w ustawieniach systemu.</string>
+    <string name="privacy_contact">Pytania o prywatność: adres e-mail dewelopera podany na stronie aplikacji w Google Play.</string>
 </resources>

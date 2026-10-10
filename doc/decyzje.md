@@ -220,3 +220,20 @@ Tabela profili już istnieje. Czas zapisu ocen pochodzi z wstrzykniętego `java.
 
 **D49. Ekran pochwały nie liczy niczego**: gwiazdka, „Brawo!”, „Lekcja przeczytana.” Bez punktów, bez
 liczby błędów, taki sam dla każdego dziecka. Dźwięk pochwały dojdzie razem z nagraniami (TODO(audio)).
+
+## Wydanie (E6)
+
+**D50. Ikona to otwarta książka ze strzałką pod spodem** na granatowym tle z motywu (`#1D4E89`),
+strzałka w ciepłym pomarańczowym kolorze z ciemnego motywu. Ikona jest tylko wektorowa (adaptacyjna,
+minSdk 26), z osobną warstwą `monochrome` bez linii tekstu dla ikon motywowych Androida 13+. Pliki
+do karty Google Play (ikona 512, grafika 1024×500) są w `doc/google-play/`, renderowane z tych samych
+kształtów.
+
+**D51. Polityka prywatności jest w aplikacji i w repozytorium** (`doc/polityka-prywatnosci.md`),
+z tym samym tekstem. W aplikacji: Dla rodzica → Prywatność, więc dziecko jej nie otwiera. Nie podajemy
+adresu e-mail w aplikacji: kontaktem jest adres dewelopera w karcie Google Play.
+
+**D52. Release buduje też AAB** i dołącza go do wydania na GitHubie (nie jako artefakt Actions).
+Z sekretem `PLAY_SERVICE_ACCOUNT_JSON` i kluczem wydania AAB trafia sam do ścieżki testów
+wewnętrznych (`r0adkll/upload-google-play`). Bez nich krok jest pomijany. Formularze Play Console
+(Families, Data safety, IARC) wypełnia właściciel konta według `doc/google-play/README.md`.

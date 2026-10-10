@@ -12,7 +12,9 @@ import pl.dev404.czytanie.feature.parent.ParentPanelRoute
 import pl.dev404.czytanie.feature.parent.lessonRatingScreen
 import pl.dev404.czytanie.feature.parent.navigateToLessonRating
 import pl.dev404.czytanie.feature.parent.navigateToParentPanel
+import pl.dev404.czytanie.feature.parent.navigateToPrivacy
 import pl.dev404.czytanie.feature.parent.parentPanelScreen
+import pl.dev404.czytanie.feature.parent.privacyScreen
 import pl.dev404.czytanie.feature.reading.navigateToReading
 import pl.dev404.czytanie.feature.reading.readingScreen
 import pl.dev404.czytanie.feature.settings.navigateToSettings
@@ -34,8 +36,14 @@ fun CzytanieNavHost(modifier: Modifier = Modifier) {
             onParentClick = navController::navigateToParentPanel,
         )
         readingScreen(onBack = backToLevels, onRateLesson = navController::navigateToLessonRating)
-        parentPanelScreen(onBack = backToLevels, onOpenSettings = navController::navigateToSettings)
+        val backToParentPanel: () -> Unit = { navController.popBackStack(ParentPanelRoute, inclusive = false) }
+        parentPanelScreen(
+            onBack = backToLevels,
+            onOpenSettings = navController::navigateToSettings,
+            onOpenPrivacy = navController::navigateToPrivacy,
+        )
         lessonRatingScreen(onDone = backToLevels)
-        settingsScreen(onBack = { navController.popBackStack(ParentPanelRoute, inclusive = false) })
+        settingsScreen(onBack = backToParentPanel)
+        privacyScreen(onBack = backToParentPanel)
     }
 }

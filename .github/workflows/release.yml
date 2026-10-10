@@ -1,6 +1,6 @@
 name: Release
 
-# Builds the APK and attaches it to a GitHub Release. No Actions artifacts are uploaded.
+# Builds the APK and the AAB (for Google Play) and attaches them to a GitHub Release. No Actions artifacts are uploaded.
 # Trigger: push a tag like v0.1.0 (git tag v0.1.0 && git push origin v0.1.0), or run the workflow
 # manually (Actions > Release > Run workflow) with a version; the tag is then created on the
 # selected commit by `gh release create`.
@@ -8,6 +8,8 @@ name: Release
 # Optional signing secrets (without them the APK is signed with a throwaway debug key, which
 # means a new release cannot be installed over the previous one without uninstalling):
 #   CZYTANIE_KEYSTORE_BASE64, CZYTANIE_KEYSTORE_PASSWORD, CZYTANIE_KEY_ALIAS, CZYTANIE_KEY_PASSWORD
+# Optional PLAY_SERVICE_ACCOUNT_JSON: the signed AAB is also sent to the Play internal testing track.
+# See doc/google-play/README.md.
 
 on:
   push:
@@ -52,26 +54,48 @@ jobs:
             echo "SIGNING_NOTE=Podpisane tymczasowym kluczem debug: przed instalacją odinstaluj poprzednią wersję." >> "$GITHUB_ENV"
           fi
 
-      - name: Check and build release APK
+      - name: Check and build release APK and AAB
         env:
           CZYTANIE_KEYSTORE_PASSWORD: ${{ secrets.CZYTANIE_KEYSTORE_PASSWORD }}
           CZYTANIE_KEY_ALIAS: ${{ secrets.CZYTANIE_KEY_ALIAS }}
           CZYTANIE_KEY_PASSWORD: ${{ secrets.CZYTANIE_KEY_PASSWORD }}
         run: |
           VERSION="${TAG#v}"
-          ./gradlew check :app:assembleRelease --stacktrace \
+          ./gradlew check :app:assembleRelease :app:bundleRelease --stacktrace \
             -Pczytanie.versionName="$VERSION" \
             -Pczytanie.versionCode="${{ github.run_number }}"
           cp app/build/outputs/apk/release/app-release.apk "czytanie-$VERSION.apk"
+          cp app/build/outputs/bundle/release/app-release.aab "czytanie-$VERSION.aab"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION="${TAG#v}"
-          gh release create "$TAG" "czytanie-$VERSION.apk" \
+          gh release create "$TAG" "czytanie-$VERSION.apk" "czytanie-$VERSION.aab" \
             --title "Czytanie $VERSION" \
             --notes "$SIGNING_NOTE" \
             --generate-notes \
             --target "$GITHUB_SHA" \
             --prerelease
+
+      - name: Check Play upload credentials
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          KEYSTORE_BASE64: ${{ secrets.CZYTANIE_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$PLAY_SERVICE_ACCOUNT_JSON" ] && [ -n "$KEYSTORE_BASE64" ]; then
+            echo "PLAY_UPLOAD=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: Upload to Google Play internal testing
+        if: env.PLAY_UPLOAD == 'true'
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: pl.dev404.czytanie
+          releaseFiles: czytanie-${{ env.VERSION }}.aab
+          releaseName: ${{ env.VERSION }}
+          track: internal
+          status: completed

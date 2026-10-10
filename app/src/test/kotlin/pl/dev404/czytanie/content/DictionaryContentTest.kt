@@ -33,7 +33,8 @@ class DictionaryContentTest {
     }
 
     @Test
-    fun `MVP ships levels 1 to 3`() {
-        parsed.dictionary.shouldNotBeNull().levels.map { it.id } shouldBe listOf(1, 2, 3)
+    fun `ships levels 1 to 6`() {
+        // Level 7 (short sentences) needs reading support for spaces and punctuation first.
+        parsed.dictionary.shouldNotBeNull().levels.map { it.id } shouldBe listOf(1, 2, 3, 4, 5, 6)
     }
 }

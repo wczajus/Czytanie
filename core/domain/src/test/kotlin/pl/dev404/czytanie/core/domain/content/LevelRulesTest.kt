@@ -45,6 +45,9 @@ class LevelRulesTest {
         "siano, sia-no, 6",
         "koń, koń, 6",
         "zima, zi-ma, 6",
+        // Digraphs with a diacritic letter belong to level 6
+        "dźwig, dźwig, 6",
+        "dżem, dżem, 6",
     )
     fun `word fits its level`(
         text: String,
@@ -75,6 +78,8 @@ class LevelRulesTest {
         // Level 5 needs a digraph and nothing from level 6
         "kot, kot, 5",
         "rzeźba, rzeź-ba, 5",
+        "dźwig, dźwig, 5",
+        "dżem, dżem, 5",
         // Level 6 needs softening or a diacritic
         "kot, kot, 6",
     )

@@ -10,8 +10,8 @@ import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 
-@OptIn(ExperimentalCoroutinesApi::class)
 /** Runs `viewModelScope` on a test dispatcher, so `runTest(extension.dispatcher)` controls its time. */
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainDispatcherExtension(val dispatcher: TestDispatcher = StandardTestDispatcher()) :
     BeforeEachCallback,
     AfterEachCallback {

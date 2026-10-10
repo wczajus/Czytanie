@@ -3,4 +3,5 @@
     <color name="window_background">#FBF8F2</color>
     <color name="launcher_background">#1D4E89</color>
     <color name="launcher_foreground">#FBF8F2</color>
+    <color name="launcher_arrow">#FFB866</color>
 </resources>

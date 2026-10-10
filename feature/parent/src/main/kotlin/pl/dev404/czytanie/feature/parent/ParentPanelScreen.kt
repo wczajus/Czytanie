@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -32,10 +33,16 @@ import pl.dev404.czytanie.core.domain.progress.Attempt
 internal fun ParentPanelScreenRoute(
     onBack: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenPrivacy: () -> Unit,
     viewModel: ParentPanelViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    ParentPanelScreen(state = state, onBack = onBack, onOpenSettings = onOpenSettings)
+    ParentPanelScreen(
+        state = state,
+        onBack = onBack,
+        onOpenSettings = onOpenSettings,
+        onOpenPrivacy = onOpenPrivacy,
+    )
 }
 
 /** For the parent: plain, dense, no child-oriented decoration. */
@@ -44,6 +51,7 @@ internal fun ParentPanelScreen(
     state: ParentPanelUiState,
     onBack: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenPrivacy: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(modifier = modifier.fillMaxSize()) {
@@ -62,8 +70,9 @@ internal fun ParentPanelScreen(
                 }
             }
             item {
-                Button(onClick = onOpenSettings, modifier = Modifier.padding(vertical = 8.dp)) {
-                    Text(stringResource(R.string.parent_open_settings))
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(vertical = 8.dp)) {
+                    Button(onClick = onOpenSettings) { Text(stringResource(R.string.parent_open_settings)) }
+                    OutlinedButton(onClick = onOpenPrivacy) { Text(stringResource(R.string.parent_open_privacy)) }
                 }
             }
             item {

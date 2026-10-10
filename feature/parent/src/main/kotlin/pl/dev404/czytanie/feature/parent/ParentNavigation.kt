@@ -11,6 +11,10 @@ import pl.dev404.czytanie.core.ui.parent.ParentGated
 @Serializable
 data object ParentPanelRoute
 
+/** The privacy policy, opened from the parent panel (already past the gate, like settings). */
+@Serializable
+data object PrivacyRoute
+
 /** The parent rates the words of a lesson the child has just read. Also behind the gate. */
 @Serializable
 data class LessonRatingRoute(val lessonId: String) {
@@ -21,15 +25,24 @@ data class LessonRatingRoute(val lessonId: String) {
 
 fun NavController.navigateToParentPanel() = navigate(ParentPanelRoute)
 
+fun NavController.navigateToPrivacy() = navigate(PrivacyRoute)
+
 fun NavController.navigateToLessonRating(lessonId: LessonId) = navigate(LessonRatingRoute(lessonId.value))
 
 fun NavGraphBuilder.parentPanelScreen(
     onBack: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenPrivacy: () -> Unit,
 ) {
     composable<ParentPanelRoute> {
-        ParentGated(onCancel = onBack) { ParentPanelScreenRoute(onBack = onBack, onOpenSettings = onOpenSettings) }
+        ParentGated(onCancel = onBack) {
+            ParentPanelScreenRoute(onBack = onBack, onOpenSettings = onOpenSettings, onOpenPrivacy = onOpenPrivacy)
+        }
     }
+}
+
+fun NavGraphBuilder.privacyScreen(onBack: () -> Unit) {
+    composable<PrivacyRoute> { PrivacyScreen(onBack = onBack) }
 }
 
 fun NavGraphBuilder.lessonRatingScreen(onDone: () -> Unit) {

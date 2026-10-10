@@ -37,12 +37,15 @@ jobs:
       # log as base64 so they can be reviewed and committed. Remove once they are in the repository.
       - name: Record reference screenshots (bootstrap)
         run: |
-          ./gradlew :feature:reading:recordRoborazziDebug --stacktrace
+          status=0
+          ./gradlew :feature:reading:recordRoborazziDebug --stacktrace || status=$?
           for f in feature/reading/src/test/snapshots/*.png; do
+            [ -f "$f" ] || continue
             echo "----- BEGIN $f -----"
             base64 -w0 "$f"; echo
             echo "----- END $f -----"
           done
+          exit $status
 
       - name: Check (lint, detekt, ktlint, unit tests, screenshots)
         run: ./gradlew check --continue --stacktrace

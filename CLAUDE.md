@@ -2,6 +2,7 @@
 
 Ten plik opisuje projekt dla Claude Code. Czytaj go na początku każdej sesji.
 Pełny dokument projektowy (wizja, dydaktyka, backlog MVP): https://claude.ai/code/artifact/2703d2f6-a574-4177-a067-9f6f4d067a4f
+(kopia w `doc/`). Decyzje podjęte w trakcie implementacji: `doc/decyzje.md` — dopisuj tam nowe.
 
 ## Cel produktu
 
@@ -27,6 +28,7 @@ Opcjonalnie odtwarzane są głoski (nagrania) i całe wyrazy (TTS lub nagranie).
 - Czcionka: Andika (SIL, OFL) w `core:ui`
 - Build: Gradle Kotlin DSL, version catalog (`gradle/libs.versions.toml`), convention plugins w `build-logic/`
 - minSdk 26, targetSdk = najnowszy stabilny
+- Pakiet / `applicationId`: `pl.dev404.czytanie`; moduły: `pl.dev404.czytanie.<ścieżka modułu>`
 
 ## Struktura modułów
 
@@ -79,6 +81,12 @@ build-logic/         convention plugins
   - każda jednostka ma wpis w `phonemes` i istniejący plik audio
   - poziom wyrazu zgodny z jego zawartością (np. poziom 3 nie zawiera dwuznaków)
 - Pułapki: „marznąć” (r+z osobno), „odzysk” (d+z osobno), zapożyczenia typu „pianino”. Przy dodawaniu wyrazów sprawdzaj je ręcznie.
+
+## CI i wydania
+
+- **Żadnych artefaktów w GitHub Actions** (nie używaj `actions/upload-artifact` ani niczego, co zapisuje artefakty). Konto nie ma na nie miejsca i build by się wywracał.
+- `.github/workflows/ci.yml`: `./gradlew check` + `assembleDebug`, raporty tylko w logu.
+- Buildy publikujemy wyłącznie jako **GitHub Releases**: `.github/workflows/release.yml` po wypchnięciu taga `v*`.
 
 ## Prywatność i Google Play Families
 

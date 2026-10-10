@@ -53,7 +53,9 @@ import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import pl.dev404.czytanie.core.domain.model.LessonId
+import pl.dev404.czytanie.core.domain.model.Level
 import pl.dev404.czytanie.core.domain.pacing.ReadingState
+import pl.dev404.czytanie.core.ui.theme.readingPassageStyle
 import pl.dev404.czytanie.core.ui.theme.readingWordStyle
 
 @Composable
@@ -115,6 +117,17 @@ private fun WordArea(
     state: ReadingUiState.Reading,
     onEvent: (ReadingEvent) -> Unit,
 ) {
+    if (state.word.level >= Level.FIRST_STORY_LEVEL) {
+        // A story's paragraph wraps over several lines and scrolls; it has no picture.
+        ReadingPassage(
+            word = state.word,
+            readingState = state.readingState,
+            style = readingPassageStyle(state.fontSize),
+            onTap = { onEvent(ReadingEvent.WordTapped) },
+            modifier = Modifier.fillMaxSize(),
+        )
+        return
+    }
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         state.image?.let { WordImage(path = it, description = state.word.text) }
         BoxWithConstraints(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {

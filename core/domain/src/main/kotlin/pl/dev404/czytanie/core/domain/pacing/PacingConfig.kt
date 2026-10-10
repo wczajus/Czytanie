@@ -14,6 +14,6 @@ data class PacingConfig(
 
     companion object {
         const val DEFAULT_TEMPO_MILLIS = 900L
-        val TEMPO_RANGE_MILLIS = 300L..1500L
+        val TEMPO_RANGE_MILLIS = 100L..1500L
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import pl.dev404.czytanie.core.domain.settings.WordFontSize
@@ -52,4 +53,21 @@ fun readingWordStyle(size: WordFontSize): TextStyle = TextStyle(
         WordFontSize.ExtraLarge -> 96.sp
     },
     letterSpacing = 0.08.em,
+)
+
+/**
+ * Style of a story's paragraph (czytanka). Smaller than a single word so a paragraph fits, with
+ * tall lines whose free space under the text holds the arrow.
+ */
+fun readingPassageStyle(size: WordFontSize): TextStyle = TextStyle(
+    fontFamily = Andika,
+    fontWeight = FontWeight.Normal,
+    fontSize = when (size) {
+        WordFontSize.Medium -> 26.sp
+        WordFontSize.Large -> 32.sp
+        WordFontSize.ExtraLarge -> 40.sp
+    },
+    letterSpacing = 0.04.em,
+    lineHeight = 2.1.em,
+    lineHeightStyle = LineHeightStyle(alignment = LineHeightStyle.Alignment.Top, trim = LineHeightStyle.Trim.None),
 )

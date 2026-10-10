@@ -13,6 +13,7 @@ import pl.dev404.czytanie.core.domain.model.Level
 import pl.dev404.czytanie.core.domain.model.Phoneme
 import pl.dev404.czytanie.core.domain.model.Word
 import pl.dev404.czytanie.core.domain.model.WordId
+import pl.dev404.czytanie.core.domain.segmentation.GraphemeSegmenter
 import pl.dev404.czytanie.core.domain.settings.ReadingSettings
 import pl.dev404.czytanie.core.domain.settings.SettingsRepository
 import pl.dev404.czytanie.core.domain.settings.WordFontSize
@@ -46,6 +47,23 @@ internal object TestWords {
         level = 7,
         lessonId = LESSON_ID,
     )
+
+    /** A story paragraph (level 8) long enough to wrap over several lines. */
+    val passage: Word = run {
+        val text = "Jedynym stałym lokatorem zawsze opustoszałego domu był pan Popiołek. Listonosz. " +
+            "Zajmował on dwa maciupeńkie pokoiki."
+        val words = Regex("\\p{L}+").findAll(text).map { it.value }.toList()
+        val segmenter = GraphemeSegmenter()
+        Word.fromAnnotation(
+            id = "passage",
+            text = text,
+            units = words.flatMap { segmenter.segment(it).graphemes },
+            // Syllables do not matter on the reading screen; one per word keeps them valid.
+            syllables = words,
+            level = Level.FIRST_STORY_LEVEL,
+            lessonId = LESSON_ID,
+        )
+    }
 
     val lesson = Lesson(LessonId(LESSON_ID), level = 3, words = listOf(mama, szafa))
 }

@@ -14,7 +14,10 @@ import pl.dev404.czytanie.core.domain.model.ReadingUnit
  * 1. "dzi" before a vowel is one unit (soft "dź"): "dziadek" → dzi a d e k.
  * 2. "si", "ci", "zi", "ni" before a vowel are one unit: "siano" → si a n o.
  * 3. Digraphs "dż", "dź", "dz", "sz", "cz", "rz", "ch" are one unit: "szafa" → sz a f a.
- * 4. Every other letter is its own unit.
+ * 4. "i" before a vowel that only softens b, p, m, w, f, k, g, l, h or ch joins it into one unit:
+ *    "pies" → pi e s, "Wierna" → Wi e r n a. Loanwords read the "i" separately ("pianino"), so
+ *    this always comes with a hint.
+ * 5. Every other letter is its own unit.
  *
  * When "i" is the vowel of the syllable after s/c/z/n/dz ("nic", "zima", "dzisiaj"), the "i" is
  * its own unit and the preceding consonant gets the soft phoneme id ("ni", "zi", "dzi"),
@@ -70,7 +73,10 @@ class GraphemeSegmenter(private val exceptions: Map<String, List<String>> = DEFA
     ): Int {
         val softened = SOFT_BEFORE_VOWEL.firstOrNull { word.startsWith(it, i) && word.isVowelAt(i + it.length) }
         val digraph = DIGRAPHS.firstOrNull { word.startsWith(it, i) }
-        return (softened ?: digraph)?.length ?: 1
+        val base = (softened ?: digraph)?.length ?: 1
+        val softenedByI = softened == null && word.substring(i, i + base) in SOFTENED_BY_I &&
+            word.getOrNull(i + base) == 'i' && word.isVowelAt(i + base + 1)
+        return if (softenedByI) base + 1 else base
     }
 
     /** s/c/z/n/dz followed by "i" acting as the syllable vowel are read soft. */
@@ -95,6 +101,9 @@ class GraphemeSegmenter(private val exceptions: Map<String, List<String>> = DEFA
             word.getOrNull(i + 1) == 'i' && word.isVowelAt(i + 2) ->
             SegmentationHint.IBeforeVowel(i + 1)
 
+        grapheme.endsWith('i') && grapheme.dropLast(1) in SOFTENED_BY_I ->
+            SegmentationHint.IBeforeVowel(i + grapheme.length - 1)
+
         else -> null
     }
 
@@ -114,6 +123,7 @@ class GraphemeSegmenter(private val exceptions: Map<String, List<String>> = DEFA
         // Longest first, so "dzi" wins over "zi".
         private val SOFT_BEFORE_VOWEL = listOf("dzi", "si", "ci", "zi", "ni")
         private val SOFTENABLE = setOf("s", "c", "z", "n", "dz")
+        private val SOFTENED_BY_I = setOf("b", "p", "m", "w", "f", "k", "g", "l", "h", "ch")
         private val PREFIXES_ENDING_WITH_D = listOf("od", "nad", "pod", "przed")
 
         /** Words where a digraph's letters are read separately. Extend as the dictionary grows. */

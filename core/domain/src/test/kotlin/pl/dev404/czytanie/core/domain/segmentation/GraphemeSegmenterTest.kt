@@ -57,6 +57,13 @@ class GraphemeSegmenterTest {
         "żaba, ż a b a",
         "gęś, g ę ś",
         "ząb, z ą b",
+        // "i" that only softens another consonant before a vowel joins it (D59)
+        "pies, pi e s",
+        "miasto, mi a s t o",
+        "Wierna, Wi e r n a",
+        "kiedy, ki e d y",
+        "biedronka, bi e d r o n k a",
+        "Popiołek, P o pi o ł e k",
         // "i" as the syllable vowel after a soft consonant stays a separate unit
         "zima, z i m a",
         "nic, n i c",
@@ -134,6 +141,12 @@ class GraphemeSegmenterTest {
     fun `i before a vowel after a non-sibilant consonant is flagged for review`() {
         segmenter.segment("pianino").hints shouldContain SegmentationHint.IBeforeVowel(1)
         segmenter.segment("Maria").hints shouldContain SegmentationHint.IBeforeVowel(3)
+    }
+
+    @Test
+    fun `consonant softened by i gets its own phoneme`() {
+        segmenter.segment("pies").units.first().phonemeId shouldBe "pi"
+        segmenter.segment("Wierna").units.first().phonemeId shouldBe "wi"
     }
 
     @Test

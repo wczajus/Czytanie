@@ -33,6 +33,18 @@ jobs:
           # Only main writes the Gradle cache; PRs read it. The cache is not artifact storage.
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
+      # TEMPORARY: bootstrap the new passage screenshots (printed as base64, no artifacts).
+      - name: Record new screenshots
+        run: |
+          set +e
+          ./gradlew :feature:reading:recordRoborazziDebug --stacktrace
+          status=$?
+          for f in feature/reading/src/test/snapshots/reading_passage_*.png; do
+            echo "----- BEGIN $f -----"; base64 -w0 "$f"; echo; echo "----- END $f -----"
+          done
+          git status --porcelain -- feature/reading/src/test/snapshots
+          exit $status
+
       - name: Check (lint, detekt, ktlint, unit tests, screenshots)
         run: ./gradlew check --continue --stacktrace
 

@@ -12,7 +12,7 @@ Opcjonalnie odtwarzane są głoski (nagrania) i całe wyrazy (TTS lub nagranie).
 
 ## Zasady dydaktyczne — NIE łam ich w kodzie
 
-- Jednostką wskazywania jest **grafem/głoska**, nie litera. Dwuznaki `sz cz rz ch dz dź dż` i zmiękczenia przed samogłoską (`si ci zi ni dzi`) to JEDNA jednostka.
+- Jednostką wskazywania jest **grafem/głoska**, nie litera. Dwuznaki `sz cz rz ch dz dź dż` i zmiękczenia przed samogłoską (`si ci zi ni dzi`, a także `pi bi mi wi ki`… — D61) to JEDNA jednostka.
 - Głoski i sylaby odtwarzamy **wyłącznie z nagrań**. Nigdy nie używaj TTS do pojedynczych liter — TTS czyta nazwy liter („be”), a dziecko ma słyszeć głoskę („b”).
 - Cały wyraz NIE jest odtwarzany automatycznie. Przycisk „posłuchaj” aktywuje się dopiero po przejściu strzałki przez cały wyraz.
 - Obrazek do wyrazu pokazujemy dopiero po przeczytaniu.

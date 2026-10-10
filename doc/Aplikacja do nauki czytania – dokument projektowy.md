@@ -51,7 +51,7 @@ MVP ma jeden tryb czytania (strzałka automatyczna) i panel rodzica; tryb „pal
 | Funkcja | Opis | Zakres |
 | --- | --- | --- |
 | Strzałka automatyczna | Sunie pod kolejnymi głoskami; bieżąca jednostka podświetlona, przeczytane wyszarzone | MVP |
-| Tempo | Suwak 300–1500 ms na jednostkę, domyślnie 900 ms; zapisywane per profil dziecka | MVP |
+| Tempo | Suwak 100–1500 ms na jednostkę (D62), domyślnie 900 ms; zapisywane per profil dziecka | MVP |
 | Głoski na głos | Nagranie każdej głoski w chwili, gdy wskazuje ją strzałka; można wyłączyć | MVP |
 | Wyraz na głos | Przycisk „posłuchaj” po przejściu strzałki; TTS lub nagranie | MVP |
 | Powtórz / pauza | Dotknięcie wyrazu zatrzymuje strzałkę; przycisk powtórzenia | MVP |

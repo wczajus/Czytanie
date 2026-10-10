@@ -38,6 +38,15 @@ internal object TestWords {
         lessonId = LESSON_ID,
     )
 
+    val alaMaKota = Word.fromAnnotation(
+        id = "ala-ma-kota",
+        text = "Ala ma kota.",
+        units = listOf("A", "l", "a", "m", "a", "k", "o", "t", "a"),
+        syllables = listOf("A", "la", "ma", "ko", "ta"),
+        level = 7,
+        lessonId = LESSON_ID,
+    )
+
     val lesson = Lesson(LessonId(LESSON_ID), level = 3, words = listOf(mama, szafa))
 }
 

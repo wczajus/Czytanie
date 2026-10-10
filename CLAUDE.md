@@ -77,7 +77,7 @@ build-logic/         convention plugins
 - Pliki: `app/src/main/assets/content/dictionary.json`, nagrania `assets/audio/phonemes/*.ogg`, `assets/audio/words/*.ogg`, obrazki `assets/images/*.webp`.
 - Import do Room przy pierwszym starcie i przy zmianie pola `version`.
 - Niezmienniki (sprawdzane testem walidatora na CAŁYM słowniku):
-  - `units.joinToString("") == text` oraz `syllables.joinToString("") == text`
+  - `units.joinToString("") == text` oraz `syllables.joinToString("") == text`; w zdaniach (poziom 7) jednostki i sylaby pokrywają tylko litery, a spacje i interpunkcja leżą między nimi (D56)
   - każda jednostka ma wpis w `phonemes` i istniejący plik audio
   - poziom wyrazu zgodny z jego zawartością (np. poziom 3 nie zawiera dwuznaków)
 - Pułapki: „marznąć” (r+z osobno), „odzysk” (d+z osobno), zapożyczenia typu „pianino”. Przy dodawaniu wyrazów sprawdzaj je ręcznie.

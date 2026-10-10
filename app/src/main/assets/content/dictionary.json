@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "phonemes": [
     {"id": "a", "grapheme": "a", "audio": "audio/phonemes/a.ogg"},
     {"id": "e", "grapheme": "e", "audio": "audio/phonemes/e.ogg"},
@@ -52,7 +52,8 @@
     {"id": 3, "name": "Wyrazy z sylab otwartych", "lessons": ["l3-1", "l3-2", "l3-3", "l3-4"]},
     {"id": 4, "name": "Sylaby zamknięte i zbitki", "lessons": ["l4-1", "l4-2", "l4-3", "l4-4"]},
     {"id": 5, "name": "Dwuznaki", "lessons": ["l5-1", "l5-2", "l5-3", "l5-4"]},
-    {"id": 6, "name": "Zmiękczenia i litery ze znakami", "lessons": ["l6-1", "l6-2", "l6-3", "l6-4"]}
+    {"id": 6, "name": "Zmiękczenia i litery ze znakami", "lessons": ["l6-1", "l6-2", "l6-3", "l6-4"]},
+    {"id": 7, "name": "Krótkie zdania", "lessons": ["l7-1", "l7-2"]}
   ],
   "words": [
     {"id": "a", "text": "a", "units": ["a"], "syllables": ["a"], "level": 1, "lesson": "l1-samogloski"},
@@ -241,6 +242,26 @@
     {"id": "góra", "text": "góra", "units": ["g", "ó", "r", "a"], "syllables": ["gó", "ra"], "level": 6, "lesson": "l6-4"},
     {"id": "łódka", "text": "łódka", "units": ["ł", "ó", "d", "k", "a"], "syllables": ["łód", "ka"], "level": 6, "lesson": "l6-4"},
     {"id": "łyżka", "text": "łyżka", "units": ["ł", "y", "ż", "k", "a"], "syllables": ["łyż", "ka"], "level": 6, "lesson": "l6-4"},
-    {"id": "pszczoła", "text": "pszczoła", "units": ["p", "sz", "cz", "o", "ł", "a"], "syllables": ["pszczo", "ła"], "level": 6, "lesson": "l6-4"}
+    {"id": "pszczoła", "text": "pszczoła", "units": ["p", "sz", "cz", "o", "ł", "a"], "syllables": ["pszczo", "ła"], "level": 6, "lesson": "l6-4"},
+    {"id": "ala-ma-kota", "text": "Ala ma kota.", "units": ["A", "l", "a", "m", "a", "k", "o", "t", "a"], "syllables": ["A", "la", "ma", "ko", "ta"], "level": 7, "lesson": "l7-1"},
+    {"id": "ola-ma-lody", "text": "Ola ma lody.", "units": ["O", "l", "a", "m", "a", "l", "o", "d", "y"], "syllables": ["O", "la", "ma", "lo", "dy"], "level": 7, "lesson": "l7-1"},
+    {"id": "to-jest-dom", "text": "To jest dom.", "units": ["T", "o", "j", "e", "s", "t", "d", "o", "m"], "syllables": ["To", "jest", "dom"], "level": 7, "lesson": "l7-1"},
+    {"id": "tata-ma-auto", "text": "Tata ma auto.", "units": ["T", "a", "t", "a", "m", "a", "a", "u", "t", "o"], "syllables": ["Ta", "ta", "ma", "au", "to"], "level": 7, "lesson": "l7-1"},
+    {"id": "mama-czyta", "text": "Mama czyta.", "units": ["M", "a", "m", "a", "cz", "y", "t", "a"], "syllables": ["Ma", "ma", "czy", "ta"], "level": 7, "lesson": "l7-1"},
+    {"id": "kot-pije-mleko", "text": "Kot pije mleko.", "units": ["K", "o", "t", "p", "i", "j", "e", "m", "l", "e", "k", "o"], "syllables": ["Kot", "pi", "je", "mle", "ko"], "level": 7, "lesson": "l7-1"},
+    {"id": "ryba-pływa", "text": "Ryba pływa.", "units": ["R", "y", "b", "a", "p", "ł", "y", "w", "a"], "syllables": ["Ry", "ba", "pły", "wa"], "level": 7, "lesson": "l7-1"},
+    {"id": "kasia-ma-lalkę", "text": "Kasia ma lalkę.", "units": ["K", "a", "si", "a", "m", "a", "l", "a", "l", "k", "ę"], "syllables": ["Ka", "sia", "ma", "lal", "kę"], "level": 7, "lesson": "l7-1"},
+    {"id": "tu-jest-las", "text": "Tu jest las.", "units": ["T", "u", "j", "e", "s", "t", "l", "a", "s"], "syllables": ["Tu", "jest", "las"], "level": 7, "lesson": "l7-1"},
+    {"id": "ela-ma-rower", "text": "Ela ma rower.", "units": ["E", "l", "a", "m", "a", "r", "o", "w", "e", "r"], "syllables": ["E", "la", "ma", "ro", "wer"], "level": 7, "lesson": "l7-1"},
+    {"id": "mama-ma-kawę", "text": "Mama ma kawę.", "units": ["M", "a", "m", "a", "m", "a", "k", "a", "w", "ę"], "syllables": ["Ma", "ma", "ma", "ka", "wę"], "level": 7, "lesson": "l7-2"},
+    {"id": "koza-je-trawę", "text": "Koza je trawę.", "units": ["K", "o", "z", "a", "j", "e", "t", "r", "a", "w", "ę"], "syllables": ["Ko", "za", "je", "tra", "wę"], "level": 7, "lesson": "l7-2"},
+    {"id": "to-jest-szafa", "text": "To jest szafa.", "units": ["T", "o", "j", "e", "s", "t", "sz", "a", "f", "a"], "syllables": ["To", "jest", "sza", "fa"], "level": 7, "lesson": "l7-2"},
+    {"id": "kura-ma-jajo", "text": "Kura ma jajo.", "units": ["K", "u", "r", "a", "m", "a", "j", "a", "j", "o"], "syllables": ["Ku", "ra", "ma", "ja", "jo"], "level": 7, "lesson": "l7-2"},
+    {"id": "żaba-skacze", "text": "Żaba skacze.", "units": ["Ż", "a", "b", "a", "s", "k", "a", "cz", "e"], "syllables": ["Ża", "ba", "ska", "cze"], "level": 7, "lesson": "l7-2"},
+    {"id": "sowa-śpi", "text": "Sowa śpi.", "units": ["S", "o", "w", "a", "ś", "p", "i"], "syllables": ["So", "wa", "śpi"], "level": 7, "lesson": "l7-2"},
+    {"id": "pada-deszcz", "text": "Pada deszcz.", "units": ["P", "a", "d", "a", "d", "e", "sz", "cz"], "syllables": ["Pa", "da", "deszcz"], "level": 7, "lesson": "l7-2"},
+    {"id": "tomek-ma-psa", "text": "Tomek ma psa.", "units": ["T", "o", "m", "e", "k", "m", "a", "p", "s", "a"], "syllables": ["To", "mek", "ma", "psa"], "level": 7, "lesson": "l7-2"},
+    {"id": "słoń-jest-duży", "text": "Słoń jest duży.", "units": ["S", "ł", "o", "ń", "j", "e", "s", "t", "d", "u", "ż", "y"], "syllables": ["Słoń", "jest", "du", "ży"], "level": 7, "lesson": "l7-2"},
+    {"id": "ola-je-zupę", "text": "Ola je zupę.", "units": ["O", "l", "a", "j", "e", "z", "u", "p", "ę"], "syllables": ["O", "la", "je", "zu", "pę"], "level": 7, "lesson": "l7-2"}
   ]
 }

@@ -254,3 +254,16 @@ jednostkę za poziom 6, gdy którakolwiek jej litera jest diakrytyczna.
 nagrać ten sam dźwięk dwa razy. Pole `note` w słowniku mówi, jak czytać grafem. Nazwy plików są w
 ASCII (`z_dot.ogg`, `a_nasal.ogg`, `dz_acute.ogg`), żeby uniknąć problemów z kodowaniem w APK i
 narzędziach. Nowe nagrania to cisza zastępcza (D26, TODO(audio)).
+
+## Po MVP: poziom 7 (zdania)
+
+**D56. Zdanie to „wyraz” poziomu 7, a jego jednostki i sylaby pokrywają tylko litery.** Spacje i
+interpunkcja leżą w przerwach między jednostkami, więc strzałka je przeskakuje, a silnik tempa się nie
+zmienia. Niezmiennik słownika brzmi teraz: jednostki (i osobno sylaby) czytane po kolei dają wszystkie
+litery tekstu, a poza nimi są tylko znaki niebędące literami. Dla poziomów 1–6 to to samo co
+`units.joinToString("") == text`, bo `LevelRules` nie dopuszcza tam spacji ani interpunkcji. Poziom 7
+wymaga co najmniej dwóch wyrazów. Walidator porównuje zdanie z `GraphemeSegmenter` wyraz po wyrazie.
+
+**D57. Spacje i kropki nigdy nie są podświetlone jako bieżące**; wyszarzają się, gdy strzałka je minie.
+Zdanie mieści się w jednej linii jak długi wyraz (zmniejszona czcionka), więc zdania poziomu 7 mają
+najwyżej kilkanaście znaków. Wielkie litery mają głoskę małej litery („A” → „a”).

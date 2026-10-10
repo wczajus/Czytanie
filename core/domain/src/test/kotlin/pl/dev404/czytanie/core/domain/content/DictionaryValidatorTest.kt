@@ -165,4 +165,32 @@ class DictionaryValidatorTest {
         issues.warnings.map { it.subject } shouldContain "word sień"
         issues.warnings.map { it.subject } shouldContain "word m0"
     }
+
+    @Test
+    fun `sentence is compared with the segmenter word by word`() {
+        fun sentence(
+            id: String,
+            units: List<String>,
+        ) = Word.fromAnnotation(
+            id = id,
+            text = "Ala ma kota.",
+            units = units,
+            syllables = listOf("A", "la", "ma", "ko", "ta"),
+            level = 7,
+            lessonId = "l7",
+        )
+        val letters = listOf("A", "l", "a", "m", "a", "k", "o", "t", "a")
+        val words = List(6) { sentence("s$it", letters) }
+        val issues = validator.validate(
+            Dictionary(
+                version = 1,
+                phonemes = listOf("a", "l", "m", "k", "o", "t").map(::phoneme),
+                levels = listOf(Level(7, "Zdania", listOf(LessonId("l7")))),
+                words = words,
+            ),
+            allAssets,
+        )
+
+        issues.shouldBeEmpty()
+    }
 }

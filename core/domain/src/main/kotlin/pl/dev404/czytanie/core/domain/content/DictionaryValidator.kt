@@ -85,20 +85,23 @@ class DictionaryValidator(private val segmenter: GraphemeSegmenter = GraphemeSeg
         word: Word,
         subject: String,
     ) = buildList {
-        // The segmenter handles single words; sentences (level 7) are checked by hand.
-        if (!word.text.all { it.isLetter() }) return@buildList
-        val proposal = segmenter.segment(word.text)
+        // The segmenter handles single words, so a sentence (level 7) is compared word by word.
+        val proposals = LETTERS.findAll(word.text).map { segmenter.segment(it.value) }.toList()
         val annotated = word.units.map { it.grapheme to it.phonemeId }
-        val proposed = proposal.units.map { it.grapheme to it.phonemeId }
+        val proposed = proposals.flatMap { proposal -> proposal.units.map { it.grapheme to it.phonemeId } }
         if (annotated != proposed) {
             add(warning(subject, "annotation $annotated differs from the segmenter's proposal $proposed"))
         }
-        proposal.hints.forEach { add(warning(subject, "check manually: $it")) }
+        proposals.flatMap { it.hints }.forEach { add(warning(subject, "check manually: $it")) }
     }
 
     private fun Word.syllablesAlignWithUnits(): Boolean {
         val unitBoundaries = units.map { it.startIndex }.toSet()
         return syllables.all { it.startIndex in unitBoundaries }
+    }
+
+    private companion object {
+        val LETTERS = Regex("\\p{L}+")
     }
 
     private fun <T, K> List<T>.duplicates(key: (T) -> K): Set<K> =

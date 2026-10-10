@@ -15,7 +15,9 @@ import pl.dev404.czytanie.core.domain.model.Word
  * 5. at least one digraph, no soft consonants or diacritics ("szafa");
  * 6. at least one soft consonant or diacritic letter ("siano", "koń"), including the digraphs
  *    written with one ("dź", "dż");
- * 7. anything (short sentences, after MVP).
+ * 7. a short sentence of two or more words, with any graphemes ("Ala ma kota.").
+ *
+ * Levels 1-6 hold single words, without spaces or punctuation.
  */
 object LevelRules {
     private val VOWELS = setOf("a", "e", "i", "o", "u", "y")
@@ -29,9 +31,21 @@ object LevelRules {
     private const val SIMPLE_WORDS_LEVEL = 4
     private const val DIGRAPHS_LEVEL = 5
     private const val SOFT_LEVEL = 6
+    private const val SENTENCE_LEVEL = 7
+    private val WORD = Regex("\\p{L}+")
 
     /** Reasons why [word] does not fit its level; empty when it fits. */
     fun violations(word: Word): List<String> {
+        val words = WORD.findAll(word.text).count()
+        val shape = when {
+            word.level == SENTENCE_LEVEL && words < 2 -> "level 7 holds a sentence of two or more words"
+            word.level != SENTENCE_LEVEL && word.text.any(Word::isSeparator) -> "levels 1-6 hold single words"
+            else -> null
+        }
+        return listOfNotNull(shape) + contentViolations(word)
+    }
+
+    private fun contentViolations(word: Word): List<String> {
         val units = word.units
         return when (word.level) {
             VOWELS_LEVEL -> listOfNotNull(

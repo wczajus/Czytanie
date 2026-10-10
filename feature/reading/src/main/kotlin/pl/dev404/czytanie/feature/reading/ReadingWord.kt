@@ -160,15 +160,24 @@ private fun Word.highlighted(
     colors: ReadingColors,
 ): AnnotatedString {
     val current = state.currentIndex
+    fun colorOf(index: Int) = when {
+        current == null -> colors.upcoming
+        index < current -> colors.read
+        index == current -> colors.current
+        else -> colors.upcoming
+    }
+
+    // Spaces and punctuation of a sentence (level 7) are never current; they fade once passed.
+    fun gapColorBefore(index: Int) = if (current != null && index <= current) colors.read else colors.upcoming
     return buildAnnotatedString {
+        var end = 0
         units.forEachIndexed { index, unit ->
-            val color = when {
-                current == null -> colors.upcoming
-                index < current -> colors.read
-                index == current -> colors.current
-                else -> colors.upcoming
+            if (unit.startIndex > end) {
+                withStyle(SpanStyle(color = gapColorBefore(index))) { append(text.substring(end, unit.startIndex)) }
             }
-            withStyle(SpanStyle(color = color)) { append(unit.grapheme) }
+            withStyle(SpanStyle(color = colorOf(index))) { append(unit.grapheme) }
+            end = unit.endIndex
         }
+        if (end < text.length) withStyle(SpanStyle(color = gapColorBefore(units.size))) { append(text.substring(end)) }
     }
 }

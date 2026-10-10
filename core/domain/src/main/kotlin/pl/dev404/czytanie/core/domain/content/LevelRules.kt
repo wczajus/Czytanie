@@ -15,7 +15,8 @@ import pl.dev404.czytanie.core.domain.model.Word
  * 5. at least one digraph, no soft consonants or diacritics ("szafa");
  * 6. at least one soft consonant or diacritic letter ("siano", "koń"), including the digraphs
  *    written with one ("dź", "dż");
- * 7. a short sentence of two or more words, with any graphemes ("Ala ma kota.").
+ * 7. a short sentence of two or more words, with any graphemes ("Ala ma kota.");
+ * 8 and later: stories (czytanki), sentences as on level 7.
  *
  * Levels 1-6 hold single words, without spaces or punctuation.
  */
@@ -38,8 +39,8 @@ object LevelRules {
     fun violations(word: Word): List<String> {
         val words = WORD.findAll(word.text).count()
         val shape = when {
-            word.level == SENTENCE_LEVEL && words < 2 -> "level 7 holds a sentence of two or more words"
-            word.level != SENTENCE_LEVEL && word.text.any(Word::isSeparator) -> "levels 1-6 hold single words"
+            word.level >= SENTENCE_LEVEL && words < 2 -> "levels 7+ hold sentences of two or more words"
+            word.level < SENTENCE_LEVEL && word.text.any(Word::isSeparator) -> "levels 1-6 hold single words"
             else -> null
         }
         return listOfNotNull(shape) + contentViolations(word)

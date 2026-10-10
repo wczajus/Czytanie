@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "phonemes": [
     {"id": "a", "grapheme": "a", "audio": "audio/phonemes/a.ogg"},
     {"id": "e", "grapheme": "e", "audio": "audio/phonemes/e.ogg"},
@@ -44,7 +44,9 @@
     {"id": "ci", "grapheme": "ci", "audio": "audio/phonemes/ci.ogg", "note": "ć przed samogłoską"},
     {"id": "zi", "grapheme": "zi", "audio": "audio/phonemes/zi.ogg", "note": "ź przed samogłoską"},
     {"id": "ni", "grapheme": "ni", "audio": "audio/phonemes/ni.ogg", "note": "ń przed samogłoską"},
-    {"id": "dzi", "grapheme": "dzi", "audio": "audio/phonemes/dzi.ogg", "note": "dź przed samogłoską"}
+    {"id": "dzi", "grapheme": "dzi", "audio": "audio/phonemes/dzi.ogg", "note": "dź przed samogłoską"},
+    {"id": "wi", "grapheme": "wi", "audio": "audio/phonemes/wi.ogg", "note": "w zmiękczone (w') przed samogłoską"},
+    {"id": "pi", "grapheme": "pi", "audio": "audio/phonemes/pi.ogg", "note": "p zmiękczone (p') przed samogłoską"}
   ],
   "levels": [
     {"id": 1, "name": "Samogłoski", "lessons": ["l1-samogloski"]},
@@ -53,7 +55,8 @@
     {"id": 4, "name": "Sylaby zamknięte i zbitki", "lessons": ["l4-1", "l4-2", "l4-3", "l4-4"]},
     {"id": 5, "name": "Dwuznaki", "lessons": ["l5-1", "l5-2", "l5-3", "l5-4"]},
     {"id": 6, "name": "Zmiękczenia i litery ze znakami", "lessons": ["l6-1", "l6-2", "l6-3", "l6-4"]},
-    {"id": 7, "name": "Krótkie zdania", "lessons": ["l7-1", "l7-2"]}
+    {"id": 7, "name": "Krótkie zdania", "lessons": ["l7-1", "l7-2"]},
+    {"id": 8, "name": "Czytanka: Czarna owieczka", "lessons": ["l8-1", "l8-2", "l8-3"]}
   ],
   "words": [
     {"id": "a", "text": "a", "units": ["a"], "syllables": ["a"], "level": 1, "lesson": "l1-samogloski"},
@@ -262,6 +265,35 @@
     {"id": "pada-deszcz", "text": "Pada deszcz.", "units": ["P", "a", "d", "a", "d", "e", "sz", "cz"], "syllables": ["Pa", "da", "deszcz"], "level": 7, "lesson": "l7-2"},
     {"id": "tomek-ma-psa", "text": "Tomek ma psa.", "units": ["T", "o", "m", "e", "k", "m", "a", "p", "s", "a"], "syllables": ["To", "mek", "ma", "psa"], "level": 7, "lesson": "l7-2"},
     {"id": "słoń-jest-duży", "text": "Słoń jest duży.", "units": ["S", "ł", "o", "ń", "j", "e", "s", "t", "d", "u", "ż", "y"], "syllables": ["Słoń", "jest", "du", "ży"], "level": 7, "lesson": "l7-2"},
-    {"id": "ola-je-zupę", "text": "Ola je zupę.", "units": ["O", "l", "a", "j", "e", "z", "u", "p", "ę"], "syllables": ["O", "la", "je", "zu", "pę"], "level": 7, "lesson": "l7-2"}
+    {"id": "ola-je-zupę", "text": "Ola je zupę.", "units": ["O", "l", "a", "j", "e", "z", "u", "p", "ę"], "syllables": ["O", "la", "je", "zu", "pę"], "level": 7, "lesson": "l7-2"},
+    {"id": "to-zosia-i-wisia", "text": "To Zosia i Wisia.", "units": ["T", "o", "Z", "o", "si", "a", "i", "W", "i", "si", "a"], "syllables": ["To", "Zo", "sia", "i", "Wi", "sia"], "level": 8, "lesson": "l8-1"},
+    {"id": "mają-owcę-perełkę", "text": "Mają owcę Perełkę.", "units": ["M", "a", "j", "ą", "o", "w", "c", "ę", "P", "e", "r", "e", "ł", "k", "ę"], "syllables": ["Ma", "ją", "ow", "cę", "Pe", "reł", "kę"], "level": 8, "lesson": "l8-1"},
+    {"id": "perełka-jest-czarna", "text": "Perełka jest czarna.", "units": ["P", "e", "r", "e", "ł", "k", "a", "j", "e", "s", "t", "cz", "a", "r", "n", "a"], "syllables": ["Pe", "reł", "ka", "jest", "czar", "na"], "level": 8, "lesson": "l8-1"},
+    {"id": "taka-jest-cicha", "text": "Taka jest cicha!", "units": ["T", "a", "k", "a", "j", "e", "s", "t", "c", "i", "ch", "a"], "syllables": ["Ta", "ka", "jest", "ci", "cha"], "level": 8, "lesson": "l8-1", "phonemeIds": ["t", "a", "k", "a", "j", "e", "s", "t", "ci", "i", "ch", "a"]},
+    {"id": "perełka-nie-żyła", "text": "Perełka nie żyła.", "units": ["P", "e", "r", "e", "ł", "k", "a", "ni", "e", "ż", "y", "ł", "a"], "syllables": ["Pe", "reł", "ka", "nie", "ży", "ła"], "level": 8, "lesson": "l8-1"},
+    {"id": "ma-córkę-metkę", "text": "Ma córkę Metkę.", "units": ["M", "a", "c", "ó", "r", "k", "ę", "M", "e", "t", "k", "ę"], "syllables": ["Ma", "cór", "kę", "Met", "kę"], "level": 8, "lesson": "l8-1"},
+    {"id": "metka-ma-trzy-dni", "text": "Metka ma trzy dni.", "units": ["M", "e", "t", "k", "a", "m", "a", "t", "rz", "y", "d", "n", "i"], "syllables": ["Met", "ka", "ma", "trzy", "dni"], "level": 8, "lesson": "l8-1", "phonemeIds": ["m", "e", "t", "k", "a", "m", "a", "t", "rz", "y", "d", "ni", "i"]},
+    {"id": "dziewczynki-płaczą", "text": "Dziewczynki płaczą.", "units": ["Dzi", "e", "w", "cz", "y", "n", "k", "i", "p", "ł", "a", "cz", "ą"], "syllables": ["Dziew", "czyn", "ki", "pła", "czą"], "level": 8, "lesson": "l8-1"},
+    {"id": "co-z-metką", "text": "Co z Metką?", "units": ["C", "o", "z", "M", "e", "t", "k", "ą"], "syllables": ["Co", "z", "Met", "ką"], "level": 8, "lesson": "l8-1"},
+    {"id": "wierna-jest-dobra", "text": "Wierna jest dobra.", "units": ["Wi", "e", "r", "n", "a", "j", "e", "s", "t", "d", "o", "b", "r", "a"], "syllables": ["Wier", "na", "jest", "do", "bra"], "level": 8, "lesson": "l8-2"},
+    {"id": "wierna-karmi-syna", "text": "Wierna karmi syna.", "units": ["Wi", "e", "r", "n", "a", "k", "a", "r", "m", "i", "s", "y", "n", "a"], "syllables": ["Wier", "na", "kar", "mi", "sy", "na"], "level": 8, "lesson": "l8-2"},
+    {"id": "metka-idzie-do-budy", "text": "Metka idzie do budy.", "units": ["M", "e", "t", "k", "a", "i", "dzi", "e", "d", "o", "b", "u", "d", "y"], "syllables": ["Met", "ka", "i", "dzie", "do", "bu", "dy"], "level": 8, "lesson": "l8-2"},
+    {"id": "wierna-wzięła-metkę", "text": "Wierna wzięła Metkę.", "units": ["Wi", "e", "r", "n", "a", "w", "zi", "ę", "ł", "a", "M", "e", "t", "k", "ę"], "syllables": ["Wier", "na", "wzię", "ła", "Met", "kę"], "level": 8, "lesson": "l8-2"},
+    {"id": "buda-była-ciemna", "text": "Buda była ciemna.", "units": ["B", "u", "d", "a", "b", "y", "ł", "a", "ci", "e", "m", "n", "a"], "syllables": ["Bu", "da", "by", "ła", "ciem", "na"], "level": 8, "lesson": "l8-2"},
+    {"id": "syn-wiernej-to-miś", "text": "Syn Wiernej to Miś.", "units": ["S", "y", "n", "Wi", "e", "r", "n", "e", "j", "t", "o", "M", "i", "ś"], "syllables": ["Syn", "Wier", "nej", "to", "Miś"], "level": 8, "lesson": "l8-2"},
+    {"id": "lał-deszcz", "text": "Lał deszcz.", "units": ["L", "a", "ł", "d", "e", "sz", "cz"], "syllables": ["Lał", "deszcz"], "level": 8, "lesson": "l8-2"},
+    {"id": "wyjrzało-słońce", "text": "Wyjrzało słońce.", "units": ["W", "y", "j", "rz", "a", "ł", "o", "s", "ł", "o", "ń", "c", "e"], "syllables": ["Wyj", "rza", "ło", "słoń", "ce"], "level": 8, "lesson": "l8-2"},
+    {"id": "jest-nasza-metka", "text": "Jest! Nasza Metka!", "units": ["J", "e", "s", "t", "N", "a", "sz", "a", "M", "e", "t", "k", "a"], "syllables": ["Jest", "Na", "sza", "Met", "ka"], "level": 8, "lesson": "l8-2"},
+    {"id": "siadła-po-psiemu", "text": "Siadła po psiemu!", "units": ["Si", "a", "d", "ł", "a", "p", "o", "p", "si", "e", "m", "u"], "syllables": ["Sia", "dła", "po", "psie", "mu"], "level": 8, "lesson": "l8-2"},
+    {"id": "miś-wpadł-do-kałuży", "text": "Miś wpadł do kałuży.", "units": ["M", "i", "ś", "w", "p", "a", "d", "ł", "d", "o", "k", "a", "ł", "u", "ż", "y"], "syllables": ["Miś", "wpadł", "do", "ka", "łu", "ży"], "level": 8, "lesson": "l8-3"},
+    {"id": "metka-łapała-motyle", "text": "Metka łapała motyle.", "units": ["M", "e", "t", "k", "a", "ł", "a", "p", "a", "ł", "a", "m", "o", "t", "y", "l", "e"], "syllables": ["Met", "ka", "ła", "pa", "ła", "mo", "ty", "le"], "level": 8, "lesson": "l8-3"},
+    {"id": "miś-gonił-kury", "text": "Miś gonił kury.", "units": ["M", "i", "ś", "g", "o", "n", "i", "ł", "k", "u", "r", "y"], "syllables": ["Miś", "go", "nił", "ku", "ry"], "level": 8, "lesson": "l8-3", "phonemeIds": ["m", "i", "ś", "g", "o", "ni", "i", "ł", "k", "u", "r", "y"]},
+    {"id": "metka-goniła-kury", "text": "Metka goniła kury.", "units": ["M", "e", "t", "k", "a", "g", "o", "n", "i", "ł", "a", "k", "u", "r", "y"], "syllables": ["Met", "ka", "go", "ni", "ła", "ku", "ry"], "level": 8, "lesson": "l8-3", "phonemeIds": ["m", "e", "t", "k", "a", "g", "o", "ni", "i", "ł", "a", "k", "u", "r", "y"]},
+    {"id": "metka-spsiała", "text": "Metka spsiała.", "units": ["M", "e", "t", "k", "a", "s", "p", "si", "a", "ł", "a"], "syllables": ["Met", "ka", "spsia", "ła"], "level": 8, "lesson": "l8-3"},
+    {"id": "metka-liże-sól", "text": "Metka liże sól.", "units": ["M", "e", "t", "k", "a", "l", "i", "ż", "e", "s", "ó", "l"], "syllables": ["Met", "ka", "li", "że", "sól"], "level": 8, "lesson": "l8-3"},
+    {"id": "miś-kicha-i-prycha", "text": "Miś kicha i prycha.", "units": ["M", "i", "ś", "k", "i", "ch", "a", "i", "p", "r", "y", "ch", "a"], "syllables": ["Miś", "ki", "cha", "i", "pry", "cha"], "level": 8, "lesson": "l8-3"},
+    {"id": "metka-prosi-o-sól", "text": "Metka prosi o sól.", "units": ["M", "e", "t", "k", "a", "p", "r", "o", "s", "i", "o", "s", "ó", "l"], "syllables": ["Met", "ka", "pro", "si", "o", "sól"], "level": 8, "lesson": "l8-3", "phonemeIds": ["m", "e", "t", "k", "a", "p", "r", "o", "si", "i", "o", "s", "ó", "l"]},
+    {"id": "zupełnie-jak-pies", "text": "Zupełnie jak pies!", "units": ["Z", "u", "p", "e", "ł", "ni", "e", "j", "a", "k", "pi", "e", "s"], "syllables": ["Zu", "peł", "nie", "jak", "pies"], "level": 8, "lesson": "l8-3"},
+    {"id": "metka-jest-kochana", "text": "Metka jest kochana!", "units": ["M", "e", "t", "k", "a", "j", "e", "s", "t", "k", "o", "ch", "a", "n", "a"], "syllables": ["Met", "ka", "jest", "ko", "cha", "na"], "level": 8, "lesson": "l8-3"}
   ]
 }

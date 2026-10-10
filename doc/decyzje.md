@@ -267,3 +267,18 @@ wymaga co najmniej dwóch wyrazów. Walidator porównuje zdanie z `GraphemeSegme
 **D57. Spacje i kropki nigdy nie są podświetlone jako bieżące**; wyszarzają się, gdy strzałka je minie.
 Zdanie mieści się w jednej linii jak długi wyraz (zmniejszona czcionka), więc zdania poziomu 7 mają
 najwyżej kilkanaście znaków. Wielkie litery mają głoskę małej litery („A” → „a”).
+
+## Czytanki
+
+**D58. Czytanka to poziom od 8 wzwyż**, nazwany jej tytułem („Czytanka: Czarna owieczka”); lista
+pokazuje sam tytuł zamiast „Poziom 8”. Lekcje czytanki to kolejne części opowiadania, a jej zdania
+podlegają tym samym regułom co poziom 7 (krótkie, w jednej linii). Pełny tekst opowiadania nie
+zmieściłby się na ekranie czytania, więc czytanka opowiada historię krótkimi zdaniami, w miarę
+możliwości słowami oryginału („Metka spsiała.”, „Zupełnie jak pies!”). Tekst źródłowy jest w
+`doc/czytanki/`. Pierwsza czytanka: Jan Grabowski, „Czarna owieczka” (domena publiczna od 2021 r.;
+ilustracji Marii Orłowskiej-Gabryś nie używamy, bo są chronione).
+
+**D59. Spółgłoska zmiękczona przez „i” przed samogłoską („Wierna” → Wi e r n a, „pies” → pi e s) to
+jedna jednostka**, tak jak „si” czy „ni”, z własną głoską (`wi`, `pi`, nagrania zastępcze). Segmentator
+tego jeszcze nie proponuje (zostaje podpowiedź „sprawdź ręcznie”, bo pułapki typu „pianino” czytają
+„i” osobno), więc te wyrazy są anotowane ręcznie, a walidator zgłasza tylko ostrzeżenia (D24).

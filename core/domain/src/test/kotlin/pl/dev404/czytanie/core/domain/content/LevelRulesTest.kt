@@ -50,6 +50,9 @@ class LevelRulesTest {
         "dżem, dżem, 6",
         // Level 7 holds short sentences
         "Ala ma kota., A-la ma ko-ta, 7",
+        // Levels from 8 on are stories (czytanki) told in short sentences
+        "Metka spsiała., Met-ka spsia-ła, 8",
+        "Zupełnie jak pies!, Zu-peł-nie jak pies, 9",
     )
     fun `word fits its level`(
         text: String,
@@ -87,6 +90,7 @@ class LevelRulesTest {
         // Sentences only on level 7, and level 7 only sentences
         "Ala ma kota., A-la ma ko-ta, 6",
         "kot, kot, 7",
+        "kot, kot, 8",
     )
     fun `word does not fit the level`(
         text: String,

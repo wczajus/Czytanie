@@ -1,7 +1,9 @@
 name: Release
 
 # Builds the APK and attaches it to a GitHub Release. No Actions artifacts are uploaded.
-# Trigger: push a tag like v0.1.0 (git tag v0.1.0 && git push origin v0.1.0).
+# Trigger: push a tag like v0.1.0 (git tag v0.1.0 && git push origin v0.1.0), or run the workflow
+# manually (Actions > Release > Run workflow) with a version; the tag is then created on the
+# selected commit by `gh release create`.
 #
 # Optional signing secrets (without them the APK is signed with a throwaway debug key, which
 # means a new release cannot be installed over the previous one without uninstalling):
@@ -10,9 +12,17 @@ name: Release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version without the v prefix, e.g. 0.1.0'
+        required: true
 
 permissions:
   contents: write
+
+env:
+  TAG: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', inputs.version) || github.ref_name }}
 
 jobs:
   release:
@@ -48,7 +58,7 @@ jobs:
           CZYTANIE_KEY_ALIAS: ${{ secrets.CZYTANIE_KEY_ALIAS }}
           CZYTANIE_KEY_PASSWORD: ${{ secrets.CZYTANIE_KEY_PASSWORD }}
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION="${TAG#v}"
           ./gradlew check :app:assembleRelease --stacktrace \
             -Pczytanie.versionName="$VERSION" \
             -Pczytanie.versionCode="${{ github.run_number }}"
@@ -58,9 +68,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          gh release create "$GITHUB_REF_NAME" "czytanie-$VERSION.apk" \
+          VERSION="${TAG#v}"
+          gh release create "$TAG" "czytanie-$VERSION.apk" \
             --title "Czytanie $VERSION" \
             --notes "$SIGNING_NOTE" \
             --generate-notes \
+            --target "$GITHUB_SHA" \
             --prerelease

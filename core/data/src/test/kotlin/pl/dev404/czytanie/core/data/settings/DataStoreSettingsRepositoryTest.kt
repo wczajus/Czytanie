@@ -5,7 +5,8 @@ import app.cash.turbine.test
 import io.kotest.matchers.shouldBe
 import java.io.File
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -62,12 +63,12 @@ class DataStoreSettingsRepositoryTest {
 
     @Test
     fun `settings survive a restart`() = runTest {
-        val firstScope = TestScope(StandardTestDispatcher(testScheduler))
-        val first = repository(firstScope)
+        // A plain Job (not a TestScope) so that cancelling it completes and releases the file.
+        val firstJob = Job()
+        val first = repository(CoroutineScope(StandardTestDispatcher(testScheduler) + firstJob))
         first.setTempo(1200)
         first.setFontSize(WordFontSize.Medium)
-        firstScope.cancel()
-        testScheduler.advanceUntilIdle()
+        firstJob.cancelAndJoin()
 
         val second = repository()
         second.settings.first() shouldBe ReadingSettings(1200, true, WordFontSize.Medium)

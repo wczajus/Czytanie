@@ -1,6 +1,7 @@
 package pl.dev404.czytanie.feature.reading
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 
+@OptIn(ExperimentalCoroutinesApi::class)
 /** Runs `viewModelScope` on a test dispatcher, so `runTest(extension.dispatcher)` controls its time. */
 class MainDispatcherExtension(val dispatcher: TestDispatcher = StandardTestDispatcher()) :
     BeforeEachCallback,

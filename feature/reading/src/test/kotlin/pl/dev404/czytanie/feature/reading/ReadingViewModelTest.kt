@@ -7,6 +7,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -18,6 +19,7 @@ import pl.dev404.czytanie.core.domain.pacing.ReadingState
 import pl.dev404.czytanie.core.domain.settings.ReadingSettings
 import pl.dev404.czytanie.core.domain.settings.WordFontSize
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ReadingViewModelTest {
     @JvmField
     @RegisterExtension

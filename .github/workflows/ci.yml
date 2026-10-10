@@ -36,5 +36,22 @@ jobs:
       - name: Check (lint, detekt, ktlint, unit tests)
         run: ./gradlew check --continue --stacktrace
 
+      # Room writes exported schemas during the build; they must be committed for migration tests.
+      # The content is printed (no artifacts) so it can be copied into the commit.
+      - name: Room schemas are committed
+        run: |
+          changed=$(git status --porcelain --untracked-files=all -- core/data/schemas | awk '{print $2}')
+          if [ -n "$changed" ]; then
+            for f in $changed; do
+              echo "::group::$f"
+              echo "----- BEGIN $f -----"
+              cat "$f"
+              echo "----- END $f -----"
+              echo "::endgroup::"
+            done
+            echo "::error::Room schema changed but is not committed: $changed"
+            exit 1
+          fi
+
       - name: Build debug APK
         run: ./gradlew assembleDebug

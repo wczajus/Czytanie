@@ -16,6 +16,8 @@ complexity:
   TooManyFunctions:
     excludes: ['**/test/**', '**/androidTest/**']
     thresholdInClasses: 15
+    # Room DAOs list one function per query.
+    ignoreAnnotated: ['Dao']
 
 style:
   MagicNumber:

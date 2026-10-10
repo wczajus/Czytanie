@@ -94,3 +94,41 @@ strzałka jednoznacznie stała pod jedną jednostką.
 **D19. Brak kopii zapasowej w chmurze** (`allowBackup=false`, reguły wykluczające wszystko). Dane
 dziecka nie opuszczają urządzenia. Uprawnienie `INTERNET` jest jawnie usuwane w manifeście
 (`tools:node="remove"`), żeby żadna zależność nie mogła go dołączyć.
+
+## Treść i dane (E2)
+
+**D20. Ścieżki zasobów w słowniku są względne wobec katalogu `assets/`** (`audio/phonemes/sz.ogg`,
+`images/szafa.webp`), a nie wobec `assets/audio/`, jak w przykładzie z dokumentu. Jedna konwencja dla
+nagrań i obrazków; walidator sprawdza istnienie pliku dokładnie pod tą ścieżką.
+
+**D21. Opcjonalne pole `phonemeIds` w wyrazie** na wypadek jednostek czytanych inaczej niż ich
+litery (np. „n” w „nic” → „ni”, zob. D9). Bez niego głoska = jednostka małymi literami.
+
+**D22. Reguły poziomów (`LevelRules`)**: 1 — jedna samogłoska; 2 — jedna sylaba otwarta „prosta
+spółgłoska + samogłoska”; 3 — co najmniej dwie sylaby otwarte z prostych grafemów; 4 — tylko proste
+grafemy; 5 — co najmniej jeden dwuznak, bez zmiękczeń i znaków diakrytycznych; 6 — co najmniej jedno
+zmiękczenie lub litera diakrytyczna (ą ę ó ł ś ć ź ń ż); 7 — bez ograniczeń. „ł” i „ó” traktujemy
+jak litery diakrytyczne (poziom 6), bo wyglądają inaczej niż litery z poziomów 1–4. Warto to
+skonsultować z metodyką; zmiana to jedna linia w `LevelRules`.
+
+**D23. Lekcja ma 6–10 wyrazów.** Dokument mówi o 8–10, ale poziom 1 ma tylko 6 samogłosek.
+
+**D24. Różnica między anotacją a `GraphemeSegmenter` to ostrzeżenie, nie błąd.** Test treści wypisuje
+ostrzeżenia w logu i przerywa build tylko na błędach.
+
+**D25. Słownik poziomów 1–3**: 6 samogłosek, 30 sylab otwartych w 3 lekcjach, 40 wyrazów w 4
+lekcjach. Spółgłoski tylko proste; pominięte są wyrazy z „si ci zi ni” (np. „zima”, „Nina”), bo to
+zmiękczenia z poziomu 6. Kolejność spółgłosek to propozycja do weryfikacji (otwarte pytanie z
+dokumentu: metoda „Kocham czytać” czy częstość).
+
+**D26. Zastępcze nagrania**: 400 ms ciszy Ogg Vorbis na głoskę, generowane przez
+`tools/generate-placeholder-audio.sh` (TODO(audio)). Prawdziwe nagranie zastępuje plik o tej samej
+nazwie.
+
+**D27. Import słownika jest leniwy**: `RoomDictionaryRepository` wywołuje `DictionaryImporter` przed
+pierwszym odczytem w procesie. Import podmienia słownik w jednej transakcji; próby dziecka
+(`attempt`) nie mają klucza obcego do wyrazów, więc nowa wersja słownika ich nie usuwa.
+
+**D28. Baza w wersji 1 (v0.1.0) jest odtwarzana, a nie migrowana**: zawierała tylko pustą tabelę
+profili. Od wersji 2 każda zmiana wymaga migracji z testem, a schematy w `core/data/schemas` muszą
+być w repozytorium (CI to sprawdza i wypisuje brakujący plik w logu).

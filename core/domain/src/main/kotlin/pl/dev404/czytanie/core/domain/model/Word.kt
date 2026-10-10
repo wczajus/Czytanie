@@ -96,8 +96,3 @@ value class WordId(val value: String) {
 value class LessonId(val value: String) {
     override fun toString() = value
 }
-
-object Level {
-    /** Levels 1–7 from the design document; MVP ships levels 1–3. */
-    val RANGE = 1..7
-}

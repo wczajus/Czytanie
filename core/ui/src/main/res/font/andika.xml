@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Andika by SIL International, SIL Open Font License 1.1 (see core/ui/licenses/Andika-OFL.txt). -->
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <font
+        android:font="@font/andika_regular"
+        android:fontStyle="normal"
+        android:fontWeight="400" />
+    <font
+        android:font="@font/andika_bold"
+        android:fontStyle="normal"
+        android:fontWeight="700" />
+</font-family>

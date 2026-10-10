@@ -1,0 +1,66 @@
+name: Release
+
+# Builds the APK and attaches it to a GitHub Release. No Actions artifacts are uploaded.
+# Trigger: push a tag like v0.1.0 (git tag v0.1.0 && git push origin v0.1.0).
+#
+# Optional signing secrets (without them the APK is signed with a throwaway debug key, which
+# means a new release cannot be installed over the previous one without uninstalling):
+#   CZYTANIE_KEYSTORE_BASE64, CZYTANIE_KEYSTORE_PASSWORD, CZYTANIE_KEY_ALIAS, CZYTANIE_KEY_PASSWORD
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: true
+
+      - name: Prepare signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.CZYTANIE_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.keystore"
+            echo "CZYTANIE_KEYSTORE_PATH=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+            echo "SIGNING_NOTE=Podpisane kluczem wydania." >> "$GITHUB_ENV"
+          else
+            echo "SIGNING_NOTE=Podpisane tymczasowym kluczem debug: przed instalacją odinstaluj poprzednią wersję." >> "$GITHUB_ENV"
+          fi
+
+      - name: Check and build release APK
+        env:
+          CZYTANIE_KEYSTORE_PASSWORD: ${{ secrets.CZYTANIE_KEYSTORE_PASSWORD }}
+          CZYTANIE_KEY_ALIAS: ${{ secrets.CZYTANIE_KEY_ALIAS }}
+          CZYTANIE_KEY_PASSWORD: ${{ secrets.CZYTANIE_KEY_PASSWORD }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          ./gradlew check :app:assembleRelease --stacktrace \
+            -Pczytanie.versionName="$VERSION" \
+            -Pczytanie.versionCode="${{ github.run_number }}"
+          cp app/build/outputs/apk/release/app-release.apk "czytanie-$VERSION.apk"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          gh release create "$GITHUB_REF_NAME" "czytanie-$VERSION.apk" \
+            --title "Czytanie $VERSION" \
+            --notes "$SIGNING_NOTE" \
+            --generate-notes \
+            --prerelease

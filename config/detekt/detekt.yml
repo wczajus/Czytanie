@@ -1,0 +1,31 @@
+# Overrides on top of the detekt default config (buildUponDefaultConfig = true).
+naming:
+  # Navigation files hold a route plus its NavGraphBuilder extension.
+  MatchingDeclarationName:
+    active: false
+  FunctionNaming:
+    ignoreAnnotated: ['Composable']
+  TopLevelPropertyNaming:
+    constantPattern: '[A-Z][A-Za-z0-9]*'
+
+complexity:
+  LongParameterList:
+    ignoreAnnotated: ['Composable']
+  LongMethod:
+    ignoreAnnotated: ['Composable']
+  TooManyFunctions:
+    excludes: ['**/test/**', '**/androidTest/**']
+    thresholdInClasses: 15
+
+style:
+  MagicNumber:
+    excludes: ['**/test/**', '**/androidTest/**', '**/theme/**']
+    ignorePropertyDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotated: ['Preview', 'Composable']
+  UnusedPrivateMember:
+    ignoreAnnotated: ['Preview']
+  ForbiddenComment:
+    active: false
+  ReturnCount:
+    max: 3

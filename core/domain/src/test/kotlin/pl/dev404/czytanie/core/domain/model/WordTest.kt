@@ -109,6 +109,34 @@ class WordTest {
     }
 
     @Test
+    fun `a syllable joins a vowel-less preposition with the next word`() {
+        val word = Word.fromAnnotation(
+            id = "kot-w-domu",
+            text = "Kot w domu.",
+            units = listOf("K", "o", "t", "w", "d", "o", "m", "u"),
+            syllables = listOf("Kot", "w do", "mu"),
+            level = 7,
+            lessonId = "l7",
+        )
+
+        word.syllables.map { it.startIndex to it.endIndex } shouldContainExactly listOf(0 to 3, 4 to 8, 8 to 10)
+    }
+
+    @Test
+    fun `a syllable must not start or end with a space`() {
+        shouldThrow<IllegalArgumentException> {
+            Word.fromAnnotation(
+                id = "ala-ma",
+                text = "Ala ma",
+                units = listOf("A", "l", "a", "m", "a"),
+                syllables = listOf("A", "la ", "ma"),
+                level = 7,
+                lessonId = "l7",
+            )
+        }
+    }
+
+    @Test
     fun `units must not cover spaces`() {
         shouldThrow<IllegalArgumentException> {
             Word.fromAnnotation(

@@ -318,3 +318,26 @@ samogłoski („w”, „z”), podaje głoski wprost. Głos espeak brzmi sztucz
 nagrania lektora zastąpią te pliki bez zmian w kodzie (te same nazwy). Nazwy plików są ASCII, małymi
 literami, z cyfrą zamiast znaku diakrytycznego (ą → a1, ż → z2), żeby nie kolidowały na systemach
 plików bez rozróżniania wielkości liter. Sylaby czytanki są przybliżone (D60).
+
+**D65. Podział na sylaby według reguł polskich.** Właściciel zgłosił błędy, a przegląd je potwierdził:
+„w” i „z” były osobnymi sylabami, „odzywały” miało „dz” jako jedną głoskę, a zbitki spółgłosek w
+czytance dzieliły się mechanicznie („niez-ręcz-nym”, „zaw-sze”). Teraz:
+- „w” i „z” nie mają samogłoski, więc łączą się z pierwszą sylabą następnego wyrazu („w domu” →
+  „w do”, „mu”). Taka sylaba jako jedyna zawiera spację w środku; jej nagranie nazywa się bez spacji
+  (`wdo.ogg`), a strzałka podświetla ją razem ze spacją;
+- między samogłoskami zbitka przechodzi do następnej sylaby, o ile polski wyraz może się nią zaczynać
+  („za-wsze”, „nie-zręcz-nym”, „mia-stecz-ka”, „po-szły”); spółgłoska półotwarta na początku zbitki
+  (r l ł m n ń j) zostaje przy poprzedniej samogłosce („Wier-na”, „Zaj-mo-wał”), a zbitka, od której
+  nie zaczyna się żaden wyraz, dzieli się jak w ręcznej anotacji („czap-ka”, „łód-ka”);
+- „au” i „eu” to jedna samogłoska („au-to”).
+Reguły są w `tools/syllabify.py`; dają dokładnie ręczną anotację poziomów 1–7, więc zmieniły się
+tylko sylaby czytanki i sylaby z „w”/„z” w zdaniach. „odzywały” ma teraz osobne „d” i „z”. Słownik v6.
+
+**D66. Nagrania sylab z neuronowego polskiego głosu Piper zamiast espeak-ng.** Głos espeak był
+polski, ale formantowy i brzmiał jak z obcym akcentem; właściciel go odrzucił. Piper (głosy
+nagrane przez polskich lektorów, licencja CC0, uruchamiane offline przez sherpa-onnx) w teście
+rozpoznawania mowy (Whisper, 40 wyrazów w zdaniu) dawał 70–80% trafień wobec 48% dla espeak.
+Pojedyncza sylaba bywa dla takiego głosu wymamrotana, więc skrypt syntezuje trzy wersje („sza!”,
+„sza.”, „sza”) i bierze najwyraźniejszą. Samotne „y” espeak czyta jako „igrek”, więc powstaje z „yt”
+uciętego przed „t”. Model pobiera tylko skrypt (raz, do `~/.cache/czytanie-tts`); aplikacja nadal
+nie ma dostępu do sieci. Nadal `TODO(audio)`: docelowo nagrania lektora.

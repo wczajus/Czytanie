@@ -25,10 +25,11 @@ data class Syllable(
 
         /**
          * Asset path of the recording of [syllable], e.g. "żą" → "audio/syllables/z2a1.ogg". Names
-         * are lowercase ASCII, so they survive any tool and case-insensitive file systems.
+         * are lowercase ASCII, so they survive any tool and case-insensitive file systems. A syllable
+         * spanning two words ("w do") is one sound, so the space is dropped ("wdo").
          */
         fun audioPathOf(syllable: String): String {
-            val name = syllable.lowercase().map { ASCII[it] ?: it.toString() }.joinToString("")
+            val name = syllable.lowercase().filter(Char::isLetter).map { ASCII[it] ?: it.toString() }.joinToString("")
             return "audio/syllables/$name.ogg"
         }
     }

@@ -15,6 +15,7 @@ class SyllableTest {
         "się, audio/syllables/sie1.ogg",
         "łeś, audio/syllables/l1es1.ogg",
         "ćń, audio/syllables/c1n1.ogg",
+        "w do, audio/syllables/wdo.ogg",
     )
     fun `recording path is lowercase ascii`(
         syllable: String,

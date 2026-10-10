@@ -10,3 +10,4 @@ build/
 .cxx
 *.keystore
 !debug.keystore
+__pycache__/

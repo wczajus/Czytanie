@@ -45,7 +45,7 @@ jobs:
             for f in $changed; do
               echo "::group::$f"
               echo "----- BEGIN $f -----"
-              cat "$f"
+              cat "$f"; echo
               echo "----- END $f -----"
               echo "::endgroup::"
             done

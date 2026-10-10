@@ -75,7 +75,8 @@ internal fun ReadingWord(
     }
 
     Box(
-        modifier = modifier.clickable(
+        // The tag is on the clickable box, which merges the word's text into one node.
+        modifier = modifier.testTag(READING_WORD_TAG).clickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
             role = Role.Button,
@@ -88,7 +89,6 @@ internal fun ReadingWord(
                 style = style,
                 softWrap = false,
                 onTextLayout = { layout = it },
-                modifier = Modifier.testTag(READING_WORD_TAG),
             )
             Spacer(Modifier.height(ArrowHeight + ArrowGap))
         }

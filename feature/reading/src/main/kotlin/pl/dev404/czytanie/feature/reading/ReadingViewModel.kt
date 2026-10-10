@@ -76,7 +76,7 @@ class ReadingViewModel @Inject constructor(
 
         Progress.NotFound -> ReadingUiState.LessonNotFound
 
-        is Progress.Finished -> ReadingUiState.LessonFinished(progress.lesson.words.size)
+        is Progress.Finished -> ReadingUiState.LessonFinished(progress.lesson.id)
 
         is Progress.AtWord -> ReadingUiState.Reading(
             word = progress.word,

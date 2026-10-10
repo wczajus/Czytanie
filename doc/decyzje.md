@@ -195,3 +195,28 @@ są błędami (D5).
 
 **D43. Nagrania `.ogg` nie są kompresowane w APK** (`noCompress`), bo `openFd` wymaga
 nieskompresowanych zasobów.
+
+## Lekcje i panel rodzica (E5)
+
+**D44. Rodzic ocenia wyrazy po lekcji, a nie po każdym wyrazie.** Na ekranie pochwały jest dyskretny
+przycisk „Dla rodzica: oceń czytanie”, który prowadzi przez bramkę do listy wyrazów lekcji z ocenami
+„przeczytane / z pomocą / jeszcze nie”. Ocena w trakcie lekcji przerywałaby dziecku czytanie, a
+przyciski oceny obok wyrazu dziecko naciskałoby samo. Nieocenione wyrazy nie są zapisywane.
+
+**D45. Lekcja jest zaliczona, gdy co najmniej 80% jej wyrazów ma ostatnią ocenę „przeczytane”**
+(8 z 10, 5 z 6). Liczy się tylko najnowsza ocena wyrazu, więc wcześniejsze „jeszcze nie” nie obciąża
+dziecka. Zaliczoną lekcję oznacza gwiazdka na liście.
+
+**D46. Bramka rodzicielska to mnożenie dwóch liczb od 3 do 9 wpisywane na klawiaturze cyfr.** Błędna
+odpowiedź od razu zmienia zadanie, więc zgadywanie nie pomaga. Bramka jest w `core:ui`, bo stoi przed
+ekranami dwóch modułów (panel i ocena lekcji), a moduły funkcji nie mogą zależeć od siebie.
+Otwarta bramka obowiązuje do wyjścia z ekranu.
+
+**D47. Ustawienia są dostępne tylko z panelu rodzica**, więc nie mają własnej bramki. Suwak tempa
+idzie od „wolniej” do „szybciej” (krótszy czas na głoskę), a podgląd rozmiaru pokazuje wyraz „szafa”.
+
+**D48. Jeden profil dziecka (`DEFAULT_PROFILE_ID = 1`)** do czasu, aż pojawi się potrzeba kilku dzieci.
+Tabela profili już istnieje. Czas zapisu ocen pochodzi z wstrzykniętego `java.time.Clock`.
+
+**D49. Ekran pochwały nie liczy niczego**: gwiazdka, „Brawo!”, „Lekcja przeczytana.” Bez punktów, bez
+liczby błędów, taki sam dla każdego dziecka. Dźwięk pochwały dojdzie razem z nagraniami (TODO(audio)).

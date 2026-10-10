@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parent_gate_title">Dla rodzica</string>
+    <string name="parent_gate_question">Ile to %1$d × %2$d?</string>
+    <string name="parent_gate_wrong">To nie ta liczba. Spróbuj z nowym działaniem.</string>
+    <string name="parent_gate_delete">Usuń cyfrę</string>
+    <string name="parent_gate_confirm">OK</string>
+    <string name="parent_gate_cancel">Wróć</string>
+</resources>

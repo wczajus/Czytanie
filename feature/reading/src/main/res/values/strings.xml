@@ -11,5 +11,6 @@
     <string name="reading_lesson_finished_title">Brawo!</string>
     <string name="reading_lesson_finished_message">Lekcja przeczytana.</string>
     <string name="reading_read_lesson_again">Przeczytaj jeszcze raz</string>
+    <string name="reading_rate_lesson">Dla rodzica: oceń czytanie</string>
     <string name="reading_lesson_not_found">Nie udało się otworzyć tej lekcji.</string>
 </resources>

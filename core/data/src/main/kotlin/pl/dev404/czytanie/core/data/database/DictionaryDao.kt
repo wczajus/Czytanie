@@ -50,6 +50,9 @@ abstract class DictionaryDao {
     @Query("SELECT * FROM phoneme ORDER BY id")
     abstract suspend fun phonemes(): List<PhonemeEntity>
 
+    @Query("SELECT id, lessonId FROM word")
+    abstract fun observeWordLessons(): Flow<List<WordLesson>>
+
     @Query("SELECT COUNT(*) FROM word")
     abstract suspend fun wordCount(): Int
 
@@ -80,3 +83,9 @@ abstract class DictionaryDao {
     @Upsert
     abstract suspend fun upsertMeta(meta: DictionaryMetaEntity)
 }
+
+/** Which lesson a word belongs to. */
+data class WordLesson(
+    val id: String,
+    val lessonId: String,
+)

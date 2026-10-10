@@ -86,7 +86,7 @@ build-logic/         convention plugins
 
 - **Żadnych artefaktów w GitHub Actions** (nie używaj `actions/upload-artifact` ani niczego, co zapisuje artefakty). Konto nie ma na nie miejsca i build by się wywracał.
 - `.github/workflows/ci.yml`: `./gradlew check` + `assembleDebug`, raporty tylko w logu.
-- Buildy publikujemy wyłącznie jako **GitHub Releases**: `.github/workflows/release.yml` po wypchnięciu taga `v*`.
+- Buildy publikujemy wyłącznie jako **GitHub Releases**: `.github/workflows/release.yml` po wypchnięciu taga `v*` albo ręcznie (`workflow_dispatch` z numerem wersji).
 
 ## Prywatność i Google Play Families
 

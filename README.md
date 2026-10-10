@@ -20,4 +20,5 @@ Wymagany JDK 17+ i Android SDK (compileSdk 36).
 ## Wydania
 
 Gotowe APK są publikowane wyłącznie w [GitHub Releases](../../releases). Nowe wydanie powstaje po
-wypchnięciu taga, np. `git tag v0.1.0 && git push origin v0.1.0`.
+wypchnięciu taga, np. `git tag v0.1.0 && git push origin v0.1.0`, albo po ręcznym uruchomieniu
+workflow **Release** (Actions → Release → Run workflow) z numerem wersji.

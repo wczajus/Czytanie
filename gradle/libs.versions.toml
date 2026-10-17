@@ -32,7 +32,7 @@ junit5 = "5.13.4"
 kotest = "5.9.1"
 turbine = "1.2.1"
 robolectric = "4.16"
-roborazzi = "1.52.0"
+roborazzi = "1.76.0"
 
 # Static analysis
 detekt = "1.23.8"

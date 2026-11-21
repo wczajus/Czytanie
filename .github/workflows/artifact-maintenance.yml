@@ -36,7 +36,7 @@ jobs:
       - name: Test archive and deletion safeguards
         run: node --test ci/artifact-maintenance.test.cjs
       - name: Archive downloads and expire old reports
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             await require('./ci/artifact-maintenance.cjs')({
